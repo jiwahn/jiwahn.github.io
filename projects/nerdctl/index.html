@@ -1,0 +1,11 @@
+---
+title: nerdctl contribution
+lang: ko
+tags: [opensource-contribution, containers, cloud-native]
+---
+
+<article class="project-page">
+  <a class="breadcrumb" href="/">← Projects</a>
+  <header class="project-hero"><p class="section-label">Upstream contribution · containerd</p><h1>nerdctl</h1><p class="project-lead">이미지를 볼륨에 마운트할 때 초기 파일 복사를 건너뛸 수 있는 <code>volume-nocopy</code> 옵션을 구현했습니다.</p><div class="project-actions"><a class="button button--primary" href="https://github.com/containerd/nerdctl">View source ↗</a><a class="button" href="https://github.com/containerd/nerdctl/pull/5129">View PR ↗</a></div>{% include project-tags.html %}</header>
+  <section class="project-story"><div class="story-label">Contribution</div><div><h2>Make volume initialization explicit</h2><p>기본 동작에서는 컨테이너 이미지 안의 파일이 새 볼륨으로 복사됩니다. <code>volume-nocopy</code> 옵션으로 이 초기 복사를 제어할 수 있게 했고, 단위 테스트와 통합 테스트를 함께 추가했습니다.</p></div></section>
+</article>

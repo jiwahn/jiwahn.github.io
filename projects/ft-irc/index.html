@@ -1,0 +1,54 @@
+---
+title: ft_irc
+lang: ko
+tags: [42 Seoul, C++, networking, system-programming]
+---
+
+<article class="project-page">
+  <a class="breadcrumb" href="/">← Projects</a>
+  <header class="project-hero">
+    <p class="section-label">Network server · 42 Seoul · 3-person team</p>
+    <h1>ft_irc</h1>
+    <p class="project-lead">여러 클라이언트가 채널에서 대화할 수 있는 IRC 서버를 C++로 구현했습니다.</p>
+    <div class="project-actions">
+      <a class="button button--primary" href="https://github.com/jiwahn/ft_irc">View source ↗</a>
+    </div>
+    {% include project-tags.html %}
+  </header>
+
+  <dl class="case-meta"><div><dt>기간</dt><dd>2023.02 – 2024.01</dd></div><div><dt>인원</dt><dd>3명</dd></div><div><dt>역할</dt><dd>Server · protocol implementation</dd></div><div><dt>Stack</dt><dd>C++ · TCP · kqueue</dd></div></dl>
+
+  <section class="project-story">
+    <div class="story-label">1. Background</div>
+    <div>
+      <h2>Real-time IRC server</h2>
+      <p>RFC 1459 호환 채팅 서버를 구현했습니다. 여러 클라이언트가 채널과 direct message를 통해 통신할 수 있도록 네트워크 연결, 사용자 상태, IRC 명령 처리를 하나의 서버로 구성했습니다.</p>
+    </div>
+  </section>
+
+  <section class="project-story">
+    <div class="story-label">4. Problem Solving</div>
+    <div>
+      <h2>TCP stream boundaries</h2>
+      <p><strong>현상:</strong> TCP는 메시지가 아니라 연속된 바이트 스트림을 전달하므로, 한 번의 <code>recv()</code>가 완전한 IRC 명령 하나를 보장하지 않습니다.</p><p><strong>해결:</strong> 클라이언트마다 수신 버퍼를 유지하고, 줄바꿈까지 수신된 완성 메시지만 <code>CommandInvoker</code>로 전달했습니다. 이 방식으로 분할되거나 합쳐진 수신 데이터에서도 명령 경계를 보존했습니다.</p>
+    </div>
+  </section>
+
+  <section class="diagram-section" aria-labelledby="architecture-title">
+    <div class="story-label">2. Architecture</div>
+    <div>
+      <h2 id="architecture-title">UML diagrams</h2>
+      <p>컴포넌트 수준의 메시지 처리 흐름과 주요 객체의 책임을 분리해 표현했습니다.</p>
+    </div>
+    <figure class="diagram-card">
+      <img src="/assets/images/diagrams/ft-irc-uml-component.png" alt="ft_irc UML component diagram">
+      <figcaption>Component diagram — event loop, parsing, command dispatch, and server state.</figcaption>
+    </figure>
+    <figure class="diagram-card">
+      <img src="/assets/images/diagrams/ft-irc-uml-class.png" alt="ft_irc UML class diagram">
+      <figcaption>Class diagram — Server, command dispatch, and IRC domain objects.</figcaption>
+    </figure>
+  </section>
+  <section class="case-section"><div class="story-label">3. What I Did</div><div><h2>Network and protocol handling</h2><ul><li>non-blocking 서버 소켓 생성, bind, listen, accept 흐름을 구현했습니다.</li><li><code>kqueue</code> 이벤트 루프로 다수 클라이언트의 read/write 이벤트를 처리했습니다.</li><li>Client, Channel, User 상태와 PASS, NICK, JOIN, PRIVMSG 등 명령 디스패치를 구현했습니다.</li><li>연결 종료와 오류 시 클라이언트 상태·fd를 정리하는 흐름을 구성했습니다.</li></ul></div></section>
+  <section class="case-section"><div class="story-label">5. Result</div><div><h2>Multi-client channel server</h2><ul><li>여러 클라이언트·채널·direct message를 처리하는 IRC 서버를 구현했습니다.</li><li>이벤트 기반 I/O, 프로토콜 파싱, 상태 관리가 결합된 서버 구조를 완성했습니다.</li></ul></div></section>
+</article>

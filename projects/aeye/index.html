@@ -1,0 +1,15 @@
+---
+title: A-EYE
+lang: ko
+tags: [frontend, TypeScript, video-processing]
+---
+<article class="project-page">
+  <a class="breadcrumb" href="/">← Projects</a>
+  <header class="project-hero"><p class="section-label">Smart surveillance · Frontend</p><h1>A-EYE</h1><p class="project-lead">카메라 피드, 검색, 리포트를 다루는 스마트 관제 시스템의 Next.js 프론트엔드입니다.</p><div class="project-actions"><a class="button button--primary" href="https://github.com/KNU-AEYE/AEYE-FE">View source ↗</a><a class="button" href="https://www.a-eye.live/">View demo ↗</a></div>{% include project-tags.html %}</header>
+  <dl class="case-meta"><div><dt>기간</dt><dd>2024.03 – 2024.06</dd></div><div><dt>인원</dt><dd>3명</dd></div><div><dt>역할</dt><dd>Frontend</dd></div><div><dt>Stack</dt><dd>Next.js · TypeScript · Recoil</dd></div></dl>
+  <section class="case-section"><div class="story-label">1. Background</div><div><h2>Operational UI for camera data</h2><p>스마트 관제 환경에서는 실시간 카메라 피드와 사용자·리포트·검색 화면을 한 제품 안에서 일관되게 제공해야 합니다. A-EYE는 이 흐름을 담당하는 프론트엔드입니다.</p></div></section>
+  <section class="case-section"><div class="story-label">2. Architecture</div><div><h2>Frontend component boundaries</h2><p>App Router가 화면을 구성하고, 공통 컴포넌트는 Recoil 상태와 API wrapper를 통해 백엔드 데이터에 접근합니다.</p></div><figure class="diagram-card"><img src="/assets/images/diagrams/aeye-component-diagram.svg" alt="A-EYE component diagram"><figcaption>Component diagram — pages, UI components, client state, API boundary, and backend.</figcaption></figure></section>
+  <section class="case-section"><div class="story-label">3. What I Did</div><div><h2>Build the application surfaces</h2><ul><li>Next.js App Router 기반 페이지와 공통 레이아웃을 구성했습니다.</li><li>로그인, 프로필, 리포트, 카메라 피드, 검색 화면을 구현했습니다.</li><li>Recoil로 UI 전역 상태를 관리하고 API 호출을 wrapper로 분리했습니다.</li><li>MUI와 Docker 기반 개발·배포 구성을 적용했습니다.</li></ul></div></section>
+  <section class="case-section"><div class="story-label">4. Problem Solving</div><div><h2>Video search thumbnail cost</h2><div class="case-problem"><h3>작은 썸네일에 원본 크기 canvas 사용</h3><p><strong>현상:</strong> CCTV 검색 결과의 썸네일 생성이 느렸고, 작은 화면 표시용 이미지에도 원본 영상 해상도와 같은 canvas를 생성하고 있었습니다.</p><p><strong>선택 및 구현:</strong> 화질 요구가 낮은 thumbnail 경로의 canvas 가로·세로를 각각 1/4로 줄였습니다. 처리 화소 수를 93.75% 줄이면서도 목록 표시 용도에는 충분한 품질을 유지했습니다.</p></div></div></section>
+  <section class="case-section"><div class="story-label">5. Result</div><div><h2>Faster video search experience</h2><ul><li>동일 로직 재현 실험에서 canvas 처리 구간 중앙값을 13.7ms에서 3.3ms로 75.9% 줄였습니다.</li><li>12개 영상의 불러오기·탐색·canvas 처리를 포함한 전체 썸네일 생성 중앙값을 458.1ms에서 346.6ms로 24.3% 줄였습니다.</li><li>교과목 A+와 대한전자공학회 인공지능학부생 논문경진대회 장려상을 받았습니다.</li></ul></div></section>
+</article>

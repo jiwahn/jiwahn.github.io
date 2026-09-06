@@ -1,0 +1,12 @@
+---
+title: C foundations
+lang: ko
+tags: [42 Seoul, C programming, system-programming]
+---
+
+<article class="project-page">
+  <a class="breadcrumb" href="/">← Projects</a>
+  <header class="project-hero"><p class="section-label">Foundations · 42 Seoul</p><h1>C foundations</h1><p class="project-lead">Libft, ft_printf, get_next_line으로 C의 메모리 모델과 Unix I/O의 기초를 직접 구현했습니다.</p><div class="project-actions"><a class="button button--primary" href="https://github.com/jiwahn/libft">View source ↗</a><a class="button" href="https://github.com/jiwahn/get_next_line">get_next_line ↗</a></div>{% include project-tags.html %}</header>
+  <dl class="case-meta"><div><dt>기간</dt><dd>2022.07 – 2022.08</dd></div><div><dt>인원</dt><dd>개인</dd></div><div><dt>역할</dt><dd>전체 구현</dd></div><div><dt>Stack</dt><dd>C · Unix I/O</dd></div></dl>
+  <section class="case-section"><div class="story-label">1. Background</div><div><h2>Build fundamental C utilities</h2><p>문자열·메모리 처리와 연결 리스트, 파일 디스크립터 기반 입력 처리를 구현하며 이후 시스템 프로젝트의 기반을 만들었습니다.</p></div></section><section class="case-section"><div class="story-label">2. Architecture</div><div><h2>Library and persistent buffer</h2><div class="architecture-flow"><span>Caller</span><span>Libft utilities</span><span>get_next_line state</span><span>File descriptor</span></div></div></section><section class="case-section"><div class="story-label">3. What I Did</div><div><h2>Memory and I/O primitives</h2><ul><li>문자열·메모리 함수와 연결 리스트를 구현했습니다.</li><li>가변 인자와 형식 지정자 출력의 기초를 다뤘습니다.</li><li>fd별 남은 버퍼를 유지하며 한 줄씩 반환하는 입력 함수를 구현했습니다.</li></ul></div></section><section class="case-section"><div class="story-label">4. Problem Solving</div><div><h2>Preserve unread input</h2><div class="case-problem"><h3>한 번 읽은 버퍼에 다음 줄이 함께 들어오는 경우</h3><p>fd별 상태를 연결 리스트로 보관해 다음 호출에서도 남은 문자열을 이어서 처리하고, EOF에서 메모리를 정리했습니다.</p></div></div></section><section class="case-section"><div class="story-label">5. Result</div><div><h2>Reusable C foundation</h2><p>메모리 관리와 fd 상태 유지라는 시스템 프로그래밍의 기본 단위를 구현했습니다.</p></div></section>
+</article>

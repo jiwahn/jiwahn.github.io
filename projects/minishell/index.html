@@ -1,0 +1,28 @@
+---
+title: minishell
+lang: ko
+tags: [42 Seoul, C programming, system-programming]
+---
+
+<article class="project-page">
+  <a class="breadcrumb" href="/">← Projects</a>
+  <header class="project-hero">
+    <p class="section-label">Unix shell · 42 Seoul · 2-person team</p>
+    <h1>minishell</h1>
+    <p class="project-lead">Bash의 핵심 동작을 재현하며 명령 해석부터 프로세스 실행까지 구현한 작은 Unix shell입니다.</p>
+    <div class="project-actions"><a class="button button--primary" href="https://github.com/jiwahn/minishell">View source ↗</a></div>
+    {% include project-tags.html %}
+  </header>
+
+  <dl class="case-meta"><div><dt>기간</dt><dd>2022.09 – 2022.10</dd></div><div><dt>인원</dt><dd>2명</dd></div><div><dt>역할</dt><dd>Parser · executor implementation</dd></div><div><dt>Stack</dt><dd>C · POSIX</dd></div></dl>
+
+  <section class="project-story"><div class="story-label">1. Background</div><div><h2>Recreate the shell execution model</h2><p>Bash의 핵심 동작을 재현하며, 문자열 입력이 명령어 해석·프로세스 생성·파일 디스크립터 연결로 이어지는 Unix 실행 모델을 구현했습니다.</p></div></section>
+  <section class="diagram-section" aria-labelledby="minishell-diagram-title">
+    <div class="story-label">2. Architecture</div>
+    <div><h2 id="minishell-diagram-title">Component diagram</h2><p>입력 처리부터 토큰화·파싱·실행 계획 수립을 거쳐 builtin 또는 Unix 프로세스 API로 이어지는 흐름입니다.</p></div>
+    <figure class="diagram-card"><img src="/assets/images/diagrams/minishell-uml-component.svg" alt="minishell UML component diagram"><figcaption>Component diagram — parsing pipeline and execution boundary.</figcaption></figure>
+  </section>
+  <section class="case-section"><div class="story-label">3. What I Did</div><div><h2>Shell pipeline implementation</h2><ul><li>token, quote, pipeline 구조를 해석하는 scanner·parser 흐름을 구현했습니다.</li><li>환경 변수와 경로 확장, builtin 명령을 분리했습니다.</li><li><code>fork()</code>, <code>execve()</code>, <code>waitpid()</code> 기반 실행 흐름을 구성했습니다.</li><li>pipe와 리다이렉션별 파일 디스크립터 연결·정리를 구현했습니다.</li></ul></div></section>
+  <section class="case-section"><div class="story-label">4. Problem Solving</div><div><h2>Pipeline and redirection</h2><div class="case-problem"><h3>명령마다 다른 표준 입출력 구성</h3><p><strong>현상:</strong> <code>ls | grep foo &gt; result.txt</code>처럼 파이프와 리다이렉션이 함께 있으면 명령마다 연결해야 할 fd가 달라집니다.</p><p><strong>해결:</strong> 파이프 생성, <code>dup2()</code> 연결, 불필요한 fd 닫기, 자식 실행을 단계로 분리했습니다. 이 방법은 실행 경로마다 fd의 소유권과 종료 시점을 명확히 합니다.</p></div></div></section>
+  <section class="case-section"><div class="story-label">5. Result</div><div><h2>Interactive shell</h2><ul><li>builtin, 환경 변수 확장, 파이프, 리다이렉션, signal 처리를 포함한 interactive shell을 구현했습니다.</li><li>프로세스 생명주기와 Unix I/O 모델을 하나의 실행 흐름으로 연결했습니다.</li></ul></div></section>
+</article>

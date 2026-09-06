@@ -1,0 +1,8 @@
+title: Jiwoo Ahn — Portfolio
+markdown: kramdown
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default

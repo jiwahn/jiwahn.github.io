@@ -1,0 +1,76 @@
+---
+title: KFS
+lang: ko
+tags: [42 Seoul, C programming, operating-systems]
+---
+
+<article class="project-page">
+  <a class="breadcrumb" href="/">← Projects</a>
+  <header class="project-hero">
+    <p class="section-label">Operating systems · 42 Seoul</p>
+    <h1>KFS</h1>
+    <p class="project-lead">부팅부터 가상 메모리, 키보드 입력과 화면 출력까지 직접 연결한 x86 커널입니다.</p>
+    <div class="project-actions"><a class="button button--primary" href="https://github.com/4kfs2/kfs">View source ↗</a></div>
+    {% include project-tags.html %}
+  </header>
+
+  <dl class="case-meta">
+    <div><dt>기간</dt><dd>2022.07 – 2023.12</dd></div>
+    <div><dt>인원</dt><dd>2명</dd></div>
+    <div><dt>역할</dt><dd>커널 부팅 · 메모리 · 터미널 구현</dd></div>
+    <div><dt>Stack</dt><dd>C · Assembly · GNU linker</dd></div>
+  </dl>
+
+  <section class="case-section">
+    <div class="story-label">1. Background</div>
+    <div><h2>프로그램이 실행될 환경부터 만들기</h2><p>프로세스와 메모리를 제공하는 운영체제 아래에서 프로그램을 만들던 경험을 확장해, 그 실행 환경 자체를 구현했습니다. 부트로더가 제어를 넘긴 순간부터 C 함수 실행, 주소 변환, 하드웨어 입출력까지 이어지는 최소한의 커널을 만드는 프로젝트입니다.</p></div>
+  </section>
+
+  <section class="case-section">
+    <div class="story-label">2. Architecture</div>
+    <div><h2>Boot → memory → terminal</h2><p>어셈블리 부트 코드에서 페이징과 스택을 준비하고 <code>kernel_main()</code>으로 진입합니다. 초기화 후 명령 루프가 키보드 입력을 읽고 VGA 화면에 출력합니다.</p></div>
+    <figure class="diagram-card">
+      <img src="{{ '/assets/images/diagrams/kfs-architecture.svg' | relative_url }}" alt="GRUB에서 boot.s와 kernel_main을 거쳐 명령 루프로 이어지는 KFS 구조. 명령 루프는 키보드 입력, VGA 출력, reboot 기능을 호출합니다.">
+      <figcaption>실제 실행·호출 경로. boot.s와 linker.ld가 커널 주소 배치를 함께 구성합니다.</figcaption>
+    </figure>
+  </section>
+
+  <section class="case-section">
+    <div class="story-label">3. What I Did</div>
+    <div><h2>커널의 초기 실행 경로 구현</h2><ul>
+      <li><strong>부팅:</strong> Multiboot2 헤더, 어셈블리 진입점, 초기 스택을 구성하고 C 커널 함수로 제어를 연결했습니다.</li>
+      <li><strong>가상 메모리:</strong> 페이지 디렉터리·테이블과 CR3·CR0 설정으로 페이징을 활성화하고, 링커의 적재 주소와 가상 주소를 연결했습니다.</li>
+      <li><strong>터미널:</strong> VGA 텍스트 출력, 줄바꿈·스크롤과 키보드 입력을 연결해 <code>kfs$</code> 명령 루프를 구성했습니다.</li>
+      <li><strong>시스템 정보:</strong> Multiboot 메모리 맵과 ELF 심볼 정보를 읽는 코드, GDT descriptor 구성 코드를 작성했습니다.</li>
+    </ul></div>
+  </section>
+
+  <section class="case-section">
+    <div class="story-label">4. Problem Solving</div>
+    <div><h2>주소와 장치 접근을 직접 연결하기</h2>
+      <div class="case-problem">
+        <h3>페이징 전후에도 실행을 이어가기</h3>
+        <p><strong>문제:</strong> 커널이 적재되는 물리 주소와 실행할 가상 주소가 다르면, 페이징을 켜는 순간부터 명령어·스택·화면 메모리에 접근할 수 있는 매핑이 필요합니다.</p>
+        <p><strong>핵심 조건:</strong> 링커의 section 배치, 페이지 테이블의 물리 주소, 전환 후 분기 주소가 일치해야 합니다.</p>
+        <p><strong>설계:</strong> <code>0x80000000</code> 오프셋을 둔 higher-half 배치를 구현했습니다. 부트 코드에서는 같은 페이지 테이블을 낮은 영역과 높은 영역에 연결해 전환 구간의 접근을 유지합니다.</p>
+        <p><strong>구현:</strong> <code>linker.ld</code>에서 가상 주소와 적재 주소를 분리하고, CR3에 페이지 디렉터리의 물리 주소를 등록합니다. CR0의 paging bit를 켠 뒤 높은 주소로 분기하고 스택을 설정해 <code>kernel_main()</code>을 호출합니다.</p>
+      </div>
+      <div class="case-problem">
+        <h3>라이브러리 없이 입력과 출력을 만들기</h3>
+        <p><strong>문제:</strong> 표준 입출력을 제공하는 운영체제가 없으므로, 키보드 입력과 화면 출력을 장치 인터페이스부터 구현해야 합니다.</p>
+        <p><strong>핵심 조건:</strong> 키보드의 scancode는 문자로 변환해야 하고, 화면에는 문자·색상과 커서 위치를 각각 반영해야 합니다.</p>
+        <p><strong>설계:</strong> 현재 구현은 키보드 상태 포트를 반복 확인하는 polling 방식입니다. 인터럽트 기반 입력보다 실행 흐름이 단순하며, 최소 명령 루프에 필요한 입력 경로를 제공합니다.</p>
+        <p><strong>구현:</strong> <code>inb()</code>로 scancode를 읽어 문자로 변환하고, VGA 물리 메모리 <code>0xB8000</code>을 매핑한 가상 주소에 문자와 색상을 기록합니다. 줄바꿈·스크롤 처리 후 <code>outb()</code>로 커서 위치를 갱신합니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <div class="story-label">5. Result</div>
+    <div><h2>부팅에서 명령 입력까지</h2><ul>
+      <li>Multiboot2 진입점, higher-half 페이징, C 커널 초기화를 하나의 실행 경로로 구성했습니다.</li>
+      <li>VGA 출력과 키보드 입력을 연결하고 <code>reboot</code>를 처리하는 기본 커널 터미널을 구현했습니다.</li>
+      <li>어셈블리·C·링커 스크립트를 함께 다루며 CPU 실행 주소와 실제 메모리 배치의 관계를 학습했습니다.</li>
+    </ul><p class="section-note">현재 소스의 <code>kernel_main()</code>에서는 GDT 초기화와 부트 정보 파싱 호출이 주석 처리되어 있습니다. 해당 코드는 구현 범위에 포함되지만 기본 실행 경로에는 포함되지 않습니다.</p></div>
+  </section>
+</article>

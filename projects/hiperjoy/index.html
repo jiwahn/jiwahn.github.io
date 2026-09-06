@@ -1,0 +1,15 @@
+---
+title: Hiperjoy
+lang: ko
+tags: [frontend, Rust, hardware-integration]
+---
+<article class="project-page">
+  <a class="breadcrumb" href="/">← Projects</a>
+  <header class="project-hero"><p class="section-label">Hiperwall · Desktop application</p><h1>Hiperjoy</h1><p class="project-lead">Leap Motion 기반 제스처 입력과 Hiperwall Controller를 연결해, 멀티모달 월 시스템을 제어하는 데스크톱 애플리케이션입니다.</p><div class="project-actions"><a class="button button--primary" href="https://github.com/jiwahn/Hiperjoy">View source ↗</a></div>{% include project-tags.html %}</header>
+  <dl class="case-meta"><div><dt>기간</dt><dd>2024.03 – 2024.06</dd></div><div><dt>인원</dt><dd>1명</dd></div><div><dt>역할</dt><dd>Gesture input prototype</dd></div><div><dt>Stack</dt><dd>Rust · leaprs · enigo</dd></div></dl>
+  <section class="case-section"><div class="story-label">1. Background</div><div><h2>Touch-free wall control</h2><p>Hiperwall의 멀티스크린 환경에서 벽 상태, 카메라, 미디어 피드를 하나의 데스크톱 UI에서 확인하고 제어하는 MVP를 만들었습니다. Leap Motion 2 입력을 활용해 비접촉 상호작용 가능성도 검증했습니다.</p></div></section>
+  <section class="case-section"><div class="story-label">2. Architecture</div><div><h2>Desktop controller pipeline</h2><div class="architecture-flow"><span>Leap Motion</span><span>Rust / LeapC</span><span>Electron + React</span><span>Hiperwall Controller</span></div></div></section>
+  <section class="case-section"><div class="story-label">3. What I Did</div><div><h2>Turn hand tracking into OS input</h2><ul><li><code>leaprs</code>로 Leap Motion 서비스·디바이스 연결과 tracking event polling loop를 구현했습니다.</li><li>손바닥 좌표, 손가락 상태, pinch distance, grab strength를 읽어 제스처를 판별했습니다.</li><li>좌표를 화면 절대 위치로 변환하고 click, scroll, drag로 매핑했습니다.</li><li>센서 인식과 OS 마우스 제어를 <code>MouseOperation</code>으로 분리하고 <code>enigo</code>로 입력을 발생시켰습니다.</li></ul></div></section>
+  <section class="case-section"><div class="story-label">4. Problem Solving</div><div><h2>Continuous sensor frames, discrete UI events</h2><div class="case-problem"><h3>한 번의 pinch가 여러 클릭이 되는 문제</h3><p><strong>현상:</strong> 하나의 손동작이 여러 tracking frame으로 연속 전달되어 pinch를 즉시 click으로 변환하면 중복 클릭이 발생했습니다.</p><p><strong>선택 및 구현:</strong> 마지막 클릭 시각을 기록하고 300ms 이내의 추가 입력을 무시하는 debounce를 적용했습니다. drag는 <code>is_dragging</code> 상태로 관리해 grab 시작에 press 한 번, 유지 중 move, 종료에 release 한 번만 실행했습니다.</p></div></div></section>
+  <section class="case-section"><div class="story-label">5. Result</div><div><h2>Touch-free input prototype</h2><ul><li>실시간 hand tracking으로 이동, 클릭, 드래그, 스크롤을 수행하는 Rust 기반 비접촉 입력 프로토타입을 구현했습니다.</li><li>하드웨어의 연속 이벤트를 상태 기반 UI 입력으로 변환하는 이벤트 처리 흐름을 완성했습니다.</li></ul></div></section>
+</article>

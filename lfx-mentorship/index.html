@@ -1,0 +1,48 @@
+---
+title: urunc · LFX Mentorship
+lang: ko
+tags: [mentorship, cloud-native, containers, unikernels, opensource-contribution]
+---
+
+<article class="project-page">
+  <a class="breadcrumb" href="/">← Projects</a>
+  <header class="project-hero">
+    <p class="section-label">LFX Mentorship · CNCF · Spring 2026</p>
+    <h1>urunc</h1>
+    <p class="project-lead">OCI 이미지 annotation이 컨테이너 런타임까지 전달되지 않는 문제를 조사하고, urunc shim이 필요한 메타데이터를 직접 조회해 runtime spec에 반영하는 방향을 구현했습니다.</p>
+    <div class="project-actions"><a class="button button--primary" href="https://github.com/urunc-dev/urunc">View source ↗</a><a class="button" href="https://github.com/urunc-dev/urunc/issues/12">View issue ↗</a></div>
+    {% include project-tags.html %}
+  </header>
+
+  <dl class="case-meta"><div><dt>기간</dt><dd>2026.03 – 2026.05</dd></div><div><dt>인원</dt><dd>1명</dd></div><div><dt>역할</dt><dd>Investigation · PoC implementation</dd></div><div><dt>Stack</dt><dd>Go · OCI · containerd</dd></div></dl>
+  <section class="case-section"><div class="story-label">2. Architecture</div><div><h2>Shim-side metadata path</h2><div class="architecture-flow"><span>OCI image</span><span>containerd content store</span><span>urunc v2 shim</span><span>runtime config.json</span></div></div></section>
+
+  <section class="project-story">
+    <div class="story-label">1. Background</div>
+    <div><h2>Image metadata stopped before the runtime</h2><p>urunc는 unikernel 실행에 필요한 메타데이터를 OCI 이미지 annotation에 저장합니다. 하지만 Docker, containerd, nerdctl, Kubernetes 같은 상위 도구를 거치면 해당 annotation이 runtime bundle의 <code>config.json</code>까지 자동으로 전달되지 않았습니다.</p></div>
+  </section>
+
+  <section class="project-story">
+    <div class="story-label">4. Problem Solving</div>
+    <div><h2>Follow the image-to-runtime conversion path</h2><p><strong>원인 탐색:</strong> OCI 이미지 변환 규칙과 containerd의 CRI·non-CRI 경로를 분석해 manifest annotation이 runtime configuration으로 추출되지 않는다는 점을 확인했습니다. config label 대안도 검토했지만 구현마다 전파 보장이 달랐습니다.</p><p><strong>선택:</strong> 이미지 자체의 자동 전파에 기대지 않고 shim이 containerd에 질의해 metadata를 가져오는 방향으로 문제를 재정의했습니다.</p></div>
+  </section>
+
+  <section class="project-story">
+    <div class="story-label">3. What I Did</div>
+    <div><h2>Retrieve metadata from the runtime v2 shim</h2><p>컨테이너 생성 단계에서 실행되는 urunc shim이 containerd API에 연결해 컨테이너와 이미지를 해석하고, content store에서 manifest를 읽어 필요한 metadata를 추출하도록 구현했습니다. 이후 annotation을 runtime <code>config.json</code>에 반영해 기존 <code>urunc.json</code> rootfs workaround 의존을 줄였습니다.</p><p>3개월 동안 메인테이너와 9회의 주간 온라인 sync를 진행하고, 설계 방향을 PoC로 구현해 annotation과 label 조회 오버헤드가 약 3ms임을 측정했습니다.</p></div>
+  </section>
+
+  <section class="contribution-section">
+    <div class="story-label">5. Result</div>
+    <div class="contribution-grid">
+      <a href="https://github.com/urunc-dev/urunc/pull/657"><span>urunc</span><strong>Shim-side annotation work</strong><small>컨테이너 생성 흐름에서 이미지 metadata를 조회하고 runtime spec에 반영하는 기반 작업.</small></a>
+      <a href="https://github.com/urunc-dev/urunc/discussions/525#discussioncomment-16326113"><span>urunc discussion</span><strong>Containerd annotation investigation</strong><small>CRI 및 non-CRI 경로에서 annotation이 전달되는 지점을 문서화.</small></a>
+      <a href="https://github.com/urunc-dev/urunc/pull/565"><span>urunc</span><strong>Additional runtime contributions</strong><small>멘토십 과정에서 발견한 런타임 동작 관련 이슈 개선에 참여.</small></a>
+    </div>
+  </section>
+
+  <section class="project-story">
+    <div class="story-label">6. Remaining</div>
+    <div><h2>Docker image-store support</h2><p>현재 방향은 containerd와 nerdctl 경로에서 유효합니다. Docker는 자체 이미지 저장소를 사용할 수 있어, shim이 동일한 방식으로 metadata를 해석하지 못할 수 있습니다. Docker/Moby 경로는 추가 설계와 논의가 필요한 과제로 남았습니다.</p><p>멘토십 종료 후 community call에서 작업 내용을 발표했고, 조사 중 발견한 signal 처리 문제도 수정했습니다.</p></div>
+  </section>
+</article>

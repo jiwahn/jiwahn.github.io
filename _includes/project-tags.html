@@ -1,0 +1,8 @@
+{% if page.tags and page.tags.size > 0 %}
+<nav class="post-tags project-tags" aria-label="프로젝트 태그">
+  {% for tag in page.tags %}
+    {% assign tag_anchor = tag | slugify %}
+    <a href="{{ '/' | relative_url }}#tag={{ tag_anchor }}">#{{ tag }}</a>
+  {% endfor %}
+</nav>
+{% endif %}

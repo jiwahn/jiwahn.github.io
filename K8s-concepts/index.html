@@ -1,0 +1,79 @@
+---
+title: 연구실 클라우드
+lang: ko
+tags: [Kubernetes, KubeVirt, cloud-native, infrastructure, virtualization, GPU, storage]
+---
+
+<article class="project-page">
+  <a class="breadcrumb" href="{{ '/' | relative_url }}">← Projects</a>
+  <header class="project-hero">
+    <p class="section-label">Research infrastructure · Private cloud</p>
+    <h1>연구실 클라우드</h1>
+    <p class="project-lead">여러 물리 서버를 하나의 클러스터로 묶어, 연구원에게 VM과 컨테이너 기반의 독립된 실험 환경을 제공했습니다.</p>
+    {% include project-tags.html %}
+  </header>
+  <dl class="case-meta">
+    <div><dt>기간</dt><dd>2026.06 – 2026.09</dd></div>
+    <div><dt>인원</dt><dd>1명</dd></div>
+    <div><dt>역할</dt><dd>인프라 설계 · 구축 · 검증</dd></div>
+    <div><dt>Stack</dt><dd>Kubernetes · KubeVirt · CDI</dd></div>
+  </dl>
+
+  <section class="case-section">
+    <div class="story-label">1. Background</div>
+    <div><h2>서버 배정에서 연구 환경 제공으로</h2>
+      <p>연구실에서는 사용자마다 물리 서버를 배정하고, 신규 사용자가 생길 때마다 계정·권한·외부 접속을 개별 설정했습니다. 같은 서버에서 실험하다 보니 시스템 설정과 자원 사용이 서로에게 영향을 줬고, 서버 상태와 GPU 사용 현황을 파악하기도 어려웠습니다.</p>
+      <p>대용량 연구 데이터는 로컬 디스크를 채워 NAS로 직접 옮겨야 했습니다. 서버별 관리 부담을 줄이고, 필요한 컴퓨팅 환경과 데이터를 함께 제공할 수 있는 공통 인프라를 구축했습니다.</p>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <div class="story-label">2. Architecture</div>
+    <div><h2>하나의 클러스터, 두 가지 실행 환경</h2><p>Kubernetes에서 컨테이너와 KubeVirt VM을 함께 관리합니다. 실행 노드와 데이터 저장소를 분리하고, GPU·스토리지·네트워크를 워크로드에 연결했습니다.</p></div>
+    <figure class="diagram-card">
+      <img src="{{ '/assets/images/diagrams/lab-cloud-architecture.svg' | relative_url }}" alt="Kubernetes 클러스터에서 컨테이너와 KubeVirt VM을 관리하고, CDI와 PVC로 디스크를 연결하며 GPU 노드와 NAS를 사용하는 연구실 클라우드 개념 구조">
+      <figcaption>개념 구성도 — 컴퓨팅·스토리지·접속·관측의 역할을 표시한 구조입니다.</figcaption>
+    </figure>
+  </section>
+
+  <section class="case-section">
+    <div class="story-label">3. What I Did</div>
+    <div><h2>연구 워크로드를 위한 인프라 구성</h2><ul>
+      <li><strong>서버 통합:</strong> 물리 서버를 Kubernetes 노드로 구성하고 워크로드의 자원 요구사항에 따라 실행 위치를 결정하도록 했습니다.</li>
+      <li><strong>VM 제공:</strong> KubeVirt와 CDI를 구성해 이미지 가져오기, DataVolume/PVC 연결, VM 부팅과 SSH 접속까지 검증했습니다.</li>
+      <li><strong>사용자 환경 분리:</strong> namespace와 CPU·메모리 request/limit을 적용하고, 독립된 OS가 필요한 연구에는 VM을 제공했습니다.</li>
+      <li><strong>연구 자원 연결:</strong> GPU 자원 할당과 NAS 기반 PV/PVC를 구성해 워크로드에서 연산 장치와 데이터에 접근하도록 했습니다.</li>
+      <li><strong>접속과 운영:</strong> 외부 접속 경로와 Service 기반 엔드포인트를 구성하고, 서버·워크로드 상태와 자원 사용량을 중앙에서 확인하도록 했습니다.</li>
+    </ul></div>
+  </section>
+
+  <section class="case-section">
+    <div class="story-label">4. Problem Solving</div>
+    <div><h2>공유 자원을 독립된 실험 환경으로</h2>
+      <div class="case-problem">
+        <h3>한 사용자의 실험이 다른 사용자에게 영향을 주는 문제</h3>
+        <p><strong>상황:</strong> 공유 서버에 sudo 권한을 제공하면 시스템 변경과 자원 부하가 다른 실험에도 영향을 줄 수 있었습니다.</p>
+        <p><strong>원인:</strong> 계정은 나뉘어 있어도 운영체제와 컴퓨팅 자원을 같은 호스트에서 공유하고 있었습니다.</p>
+        <p><strong>설계:</strong> 독립된 OS가 필요한 환경은 KubeVirt VM으로, 컨테이너로 실행 가능한 작업은 Pod로 제공했습니다. 두 실행 형태를 Kubernetes에서 함께 관리해 사용 목적에 따라 선택할 수 있도록 했습니다.</p>
+        <p><strong>구현·검증:</strong> namespace와 자원 요구량·상한을 설정하고, VM 생성부터 디스크·네트워크 연결, SSH 접속까지 신규 사용자 시나리오로 검증했습니다.</p>
+      </div>
+      <div class="case-problem">
+        <h3>연구 데이터와 GPU가 특정 서버에 묶이는 문제</h3>
+        <p><strong>상황:</strong> 로컬 디스크가 가득 차면 NAS로 파일을 옮겨야 했고, GPU를 쓰려면 해당 서버의 사용 상황을 직접 확인해야 했습니다.</p>
+        <p><strong>원인:</strong> 데이터 위치와 연산 자원 이용 방식이 개별 물리 서버에 종속되어 있었습니다.</p>
+        <p><strong>설계:</strong> NAS를 공통 영구 저장소로 연결하고, GPU는 워크로드가 요청하는 클러스터 자원으로 관리했습니다. 실행 위치와 데이터 수명을 분리하는 구조입니다.</p>
+        <p><strong>구현·검증:</strong> PV/PVC로 데이터를 마운트하고 GPU 요구사항에 따른 배치·접근을 확인했습니다. 서로 다른 워크로드의 NAS 접근과 새 노드 추가를 통한 자원 확장도 검증했습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <div class="story-label">5. Result</div>
+    <div><h2>클러스터 단위의 연구 환경 운영</h2><ul>
+      <li>개별 서버 계정 배정에서 VM·컨테이너 단위의 연구 환경 제공으로 전환했습니다.</li>
+      <li>VM과 컨테이너를 동일한 Kubernetes 환경에서 관리하고 GPU·NAS·네트워크를 연결했습니다.</li>
+      <li>서버와 워크로드의 상태·자원 사용량을 중앙에서 확인할 수 있도록 구성했습니다.</li>
+      <li>노드 추가로 컴퓨팅 자원을 확장하는 구조와 실제 사용자 접속 흐름을 검증했습니다.</li>
+    </ul></div>
+  </section>
+</article>

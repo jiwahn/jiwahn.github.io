@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: 'en' }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/github.min.css">
+    <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
+  </head>
+  <body>
+    {% assign page_language = page.lang | default: 'en' %}
+    {% if page_language == 'ko' %}
+      {% assign alternate_language = 'English' %}
+      {% assign alternate_language_code = 'en' %}
+      {% assign alternate_url = page.en_url %}
+      {% assign unavailable_message = 'English version coming soon.' %}
+    {% else %}
+      {% assign alternate_language = '한국어' %}
+      {% assign alternate_language_code = 'ko' %}
+      {% assign alternate_url = page.ko_url %}
+      {% assign unavailable_message = '한국어 버전은 준비 중입니다.' %}
+    {% endif %}
+
+    <header class="site-header">
+      <a class="site-brand" href="{{ '/' | relative_url }}">Jiwoo Ahn</a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="{{ '/' | relative_url }}#projects">Projects</a>
+        <a href="{{ '/about/' | relative_url }}">About</a>
+        <a href="https://github.com/jiwahn">GitHub ↗</a>
+      </nav>
+      <div class="site-language">
+        {% if alternate_url %}
+          <a class="language-switch" href="{{ alternate_url | relative_url }}" lang="{{ alternate_language_code }}">{{ alternate_language }}</a>
+        {% else %}
+          <button class="language-switch" type="button" aria-expanded="false" aria-controls="language-placeholder">
+            {{ alternate_language }}
+          </button>
+          <p class="language-placeholder" id="language-placeholder" hidden>{{ unavailable_message }}</p>
+        {% endif %}
+      </div>
+    </header>
+
+    {% if page.toc %}
+      <nav class="toc" aria-label="Post index">
+        <p class="toc-title">Index</p>
+        <ul>
+          {% for item in page.toc %}
+            <li><a href="#{{ item.id }}">{{ item.label }}</a></li>
+          {% endfor %}
+        </ul>
+      </nav>
+    {% endif %}
+
+    <main>
+      {% if page.date %}
+        <time class="post-date" datetime="{{ page.date | date_to_xmlschema }}">
+          {{ page.date | date: "%Y.%m.%d" }}
+        </time>
+      {% endif %}
+
+      {% unless content contains 'class="project-page"' %}
+      {% if page.tags and page.tags.size > 0 %}
+        <nav class="post-tags" aria-label="Tags">
+          {% for tag in page.tags %}
+            {% assign tag_anchor = tag | slugify %}
+            <a href="{{ '/' | relative_url }}#tag={{ tag_anchor }}">#{{ tag }}</a>
+          {% endfor %}
+        </nav>
+      {% endif %}
+
+      {% endunless %}
+      {{ content }}
+
+      {% if page.back_link %}
+        <a class="back-link" href="{{ page.back_link | relative_url }}">Back</a>
+      {% endif %}
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/languages/go.min.js"></script>
+    <script>
+      // Syntax highlighting is optional. A blocked CDN must not prevent the
+      // portfolio controls below from initializing.
+      if (window.hljs) {
+        window.hljs.highlightAll();
+      }
+
+      const languageSwitch = document.querySelector('.language-switch[type="button"]');
+      const languagePlaceholder = document.querySelector('.language-placeholder');
+      if (languageSwitch && languagePlaceholder) {
+        languageSwitch.addEventListener('click', () => {
+          const isHidden = languagePlaceholder.hidden;
+          languagePlaceholder.hidden = !isHidden;
+          languageSwitch.setAttribute('aria-expanded', String(isHidden));
+        });
+      }
+
+      const tagFilters = [...document.querySelectorAll('[data-tag-filter]')];
+      const categories = [...document.querySelectorAll('[data-category]')];
+      const taggedPosts = [...document.querySelectorAll('[data-post-tags]')];
+      const filterStatus = document.querySelector('[data-filter-status]');
+
+      if (categories.length && taggedPosts.length) {
+        const tagToggle = document.querySelector('.tag-toggle');
+        const tagPanel = document.querySelector('#tag-options');
+        const showTags = (open) => {
+          tagPanel.hidden = !open;
+          tagToggle.setAttribute('aria-expanded', String(open));
+          tagToggle.textContent = open ? '태그 접기' : '태그 더 보기';
+        };
+        tagToggle.addEventListener('click', () => showTags(tagPanel.hidden));
+        const allFilter = categories.find((button) => button.dataset.category === 'all');
+        const controls = [...categories, ...tagFilters];
+        const labels = new Map(controls.map((button) => [button, button.childNodes[0].textContent.trim()]));
+        const matches = (post, button) => {
+          if (button === allFilter) return true;
+          const tags = post.dataset.postTags.split(/\s+/);
+          const wanted = button.dataset.tagFilter ? [button.dataset.tagFilter] : button.dataset.match.split(/\s+/);
+          return wanted.some((tag) => tags.includes(tag));
+        };
+        controls.forEach((button) => {
+          button.querySelector('[data-count]').textContent = taggedPosts.filter((post) => matches(post, button)).length;
+        });
+        const setActiveFilter = (active) => {
+          controls.forEach((button) => {
+            button.classList.toggle('is-selected', button === active);
+            button.setAttribute('aria-pressed', String(button === active));
+          });
+          let count = 0;
+          taggedPosts.forEach((post) => {
+            post.hidden = !matches(post, active);
+            if (!post.hidden) count++;
+          });
+          filterStatus.textContent = `${labels.get(active)} · ${count}개`;
+          document.querySelector('[data-post-empty]').hidden = count > 0;
+          if (active.dataset.tagFilter) showTags(true);
+        };
+        const syncFromURL = () => {
+          const params = new URLSearchParams(window.location.hash.slice(1));
+          const active = tagFilters.find((button) => button.dataset.tagFilter === params.get('tag'))
+            || categories.find((button) => button.dataset.category === params.get('category'))
+            || allFilter;
+          setActiveFilter(active);
+        };
+        controls.forEach((button) => {
+          button.addEventListener('click', () => {
+            const active = button.classList.contains('is-selected') ? allFilter : button;
+            const hash = active === allFilter ? '' : active.dataset.tagFilter
+              ? `#tag=${encodeURIComponent(active.dataset.tagFilter)}`
+              : `#category=${encodeURIComponent(active.dataset.category)}`;
+            history.replaceState(null, '', window.location.pathname + window.location.search + hash);
+            setActiveFilter(active);
+          });
+        });
+        window.addEventListener('hashchange', syncFromURL);
+        window.addEventListener('popstate', syncFromURL);
+        syncFromURL();
+      }
+    </script>
+  </body>
+</html>
