@@ -1,0 +1,38 @@
+---
+title: philosophers
+layout: case
+lang: en
+tags: [42 Seoul, C programming, concurrency, operating-systems]
+eyebrow: Concurrency · 42 Seoul
+lead: Dining Philosophers in C using pthread and mutexes to coordinate shared resources and execution order
+links:
+  - {url: 'https://github.com/jiwahn/Philosophers', label: 'View source ↗'}
+meta:
+  - {label: Period, value: '2022.11'}
+  - {label: Team, value: Solo}
+  - {label: Role, value: Full implementation}
+  - {label: Technologies, value: C · pthread}
+sections:
+  - label: Overview
+    title: Threads sharing limited resources
+    points:
+      - Each philosopher acquires both adjacent forks, eats, and returns them
+      - Implemented per-philosopher eating/sleeping routines and time-based state checks
+  - label: Problem
+    title: Circular waiting and shared-state races
+    points:
+      - Deadlock possible when every philosopher holds one fork and waits for the other
+      - State updates and output require synchronization between threads
+  - label: Approach
+    title: Order resource acquisition and use mutexes
+    points:
+      - Adjusted fork-lock acquisition order to prevent circular waiting
+      - Protected fork access and thread-state updates with mutexes
+      - Implemented time-based state checks and synchronized output
+  - label: Execution flow
+    title: Acquire, eat, release, and monitor state
+    points:
+      - Philosopher-thread lock acquisition, state updates, and release alongside monitor checks
+    diagrams:
+      - {src: /assets/images/diagrams/philosophers-uml-sequence.svg, alt: philosophers UML sequence diagram, caption: Mutex acquisition, critical sections, state checks, and release}
+---

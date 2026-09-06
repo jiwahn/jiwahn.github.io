@@ -1,0 +1,31 @@
+---
+layout: project
+---
+<dl class="case-meta">
+  {% for item in page.meta %}
+  <div><dt>{{ item.label | escape }}</dt><dd>{{ item.value }}</dd></div>
+  {% endfor %}
+</dl>
+{% for section in page.sections %}
+<section class="case-section">
+  <div class="story-label">{{ section.label | escape }}</div>
+  <div>
+    <h2{% if section.id %} id="{{ section.id }}"{% endif %}>{{ section.title | escape }}</h2>
+    <ul>{% for point in section.points %}<li>{{ point }}</li>{% endfor %}</ul>
+    {% if section.links %}
+    <ul class="pr-list">
+      {% for link in section.links %}
+      <li><a class="pr-row" href="{{ link.url | escape }}"><p class="pr-number">{{ link.label | escape }}</p><h3>{{ link.title | escape }}</h3></a></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  {% for diagram in section.diagrams %}
+  <figure class="diagram-card">
+    <img src="{{ diagram.src | relative_url }}" alt="{{ diagram.alt | escape }}">
+    {% if diagram.caption %}<figcaption>{{ diagram.caption | escape }}</figcaption>{% endif %}
+  </figure>
+  {% endfor %}
+</section>
+{% endfor %}
+{{ content }}

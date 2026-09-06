@@ -1,0 +1,44 @@
+---
+title: minishell
+layout: case
+lang: en
+tags: [42 Seoul, C programming, system-programming]
+eyebrow: Unix shell · 42 Seoul · 2-person team
+lead: A Unix shell with command parsing, process execution, pipelines, and redirection
+links:
+  - {url: 'https://github.com/jiwahn/minishell', label: 'View source ↗'}
+meta:
+  - {label: Period, value: 2022.09 – 2022.10}
+  - {label: Team, value: 2 people}
+  - {label: Role, value: Parser · Executor implementation}
+  - {label: Technologies, value: C · POSIX}
+sections:
+  - label: Overview
+    title: From input strings to process execution
+    points:
+      - Two-person project reproducing core Bash behavior
+      - Responsible for command parsing and execution
+  - label: Problem
+    title: Connect pipeline and redirection I/O
+    points:
+      - Handle combined pipelines and redirection such as <code>ls | grep foo &gt; result.txt</code>
+      - Track each command's standard I/O and when to close unneeded file descriptors
+  - label: Approach
+    title: Separate parsing, wiring, and execution
+    points:
+      - Implemented a scanner and parser for tokens, quotes, and pipeline structure
+      - Separated environment/path expansion and builtin handling
+      - Created pipes → connected descriptors with <code>dup2()</code> → closed unneeded descriptors → executed child processes
+      - Implemented process creation, execution, and reaping through <code>fork()</code>, <code>execve()</code>, and <code>waitpid()</code>
+  - label: Implementation
+    title: Core interactive-shell functionality
+    points:
+      - Builtins, environment expansion, pipelines, redirection, and signal handling
+      - File-descriptor wiring/cleanup and process lifecycle management across execution paths
+  - label: Command flow
+    title: The boundary between parsing and execution
+    points:
+      - Input → tokenization and parsing → execution plan → builtin or Unix process APIs
+    diagrams:
+      - {src: /assets/images/diagrams/minishell-uml-component.svg, alt: minishell UML component diagram, caption: Parsing and process-execution boundaries}
+---

@@ -1,0 +1,48 @@
+---
+title: A-EYE
+layout: case
+lang: en
+tags: [frontend, TypeScript, video-processing]
+eyebrow: Smart surveillance · Frontend
+lead: A Next.js surveillance frontend for camera feeds, search, and reports
+links:
+  - {url: 'https://github.com/KNU-AEYE/AEYE-FE', label: 'View source ↗'}
+  - {url: 'https://www.a-eye.live/', label: 'View demo ↗'}
+meta:
+  - {label: Period, value: 2024.03 – 2024.06}
+  - {label: Team, value: 3 people}
+  - {label: Role, value: Frontend}
+  - {label: Technologies, value: Next.js · TypeScript · Recoil}
+sections:
+  - label: Overview
+    title: Monitoring UI for camera data and search results
+    points:
+      - Responsible for frontend development in a three-person team
+      - Implemented login, profile, reports, camera feeds, and search screens
+      - Set up App Router, shared layouts, Recoil state, and separate API wrappers
+      - Used MUI and a Docker-based development and deployment setup
+  - label: Problem
+    title: Unnecessary full-resolution processing for thumbnails
+    id: thumbnail-performance
+    points:
+      - Delayed thumbnail generation in CCTV search results
+      - Found that even small list thumbnails used a canvas matching the source video's resolution
+  - label: Approach
+    title: Resize the canvas for its display purpose
+    points:
+      - Reduced both canvas dimensions to one quarter in the thumbnail-generation path
+      - Reduced the number of processed pixels by 93.75%
+      - Limited the change to list thumbnails, not source video
+  - label: Verification & outcomes
+    title: Compared processing time in a reproduction experiment
+    points:
+      - 'Median canvas processing with reproduced logic: 13.7ms → 3.3ms, a 75.9% reduction'
+      - 'Median total thumbnail generation for 12 videos, including loading, seeking, and canvas processing: 458.1ms → 346.6ms, a 24.3% reduction'
+      - A+ course grade and an encouragement award in the Institute of Electronics and Information Engineers' undergraduate AI paper competition
+  - label: UI architecture
+    title: Separate pages, state, and API responsibilities
+    points:
+      - App Router pages → shared UI components → Recoil state and API wrappers → backend
+    diagrams:
+      - {src: /assets/images/diagrams/aeye-component-diagram.svg, alt: A-EYE component diagram, caption: Pages, UI components, client state, APIs, and backend}
+---

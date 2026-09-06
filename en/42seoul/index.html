@@ -1,0 +1,16 @@
+---
+title: 42 Seoul
+layout: project
+project: true
+lang: en
+tags: [42 Seoul, C programming, C++, system-programming, networking, operating-systems, concurrency]
+eyebrow: Systems programming · 42 Seoul
+lead: C/C++ projects in Unix systems, networking, operating systems, and concurrency
+---
+{% include locale.html %}
+{% assign projects = site.data.en.projects | where: 'group', '42seoul' %}
+<div class="project-list project-collection">
+  {% for project in projects %}
+  {% include project-card.html project=project number=forloop.index %}
+  {% endfor %}
+</div>

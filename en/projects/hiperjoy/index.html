@@ -1,0 +1,40 @@
+---
+title: Hiperjoy
+layout: case
+lang: en
+tags: [frontend, Rust, hardware-integration]
+eyebrow: Hiperwall · Desktop application
+lead: A Rust touchless-input prototype translating Leap Motion hand tracking into mouse input
+links:
+  - {url: 'https://github.com/jiwahn/Hiperjoy', label: 'View source ↗'}
+meta:
+  - {label: Period, value: 2024.03 – 2024.06}
+  - {label: Team, value: Solo}
+  - {label: Role, value: Gesture-input prototype implementation}
+  - {label: Technologies, value: Rust · leaprs · enigo}
+sections:
+  - label: Overview
+    title: Touchless control through hand gestures
+    points:
+      - Gesture-input prototype for Hiperwall's multiscreen environment
+      - Translated Leap Motion 2 hand tracking into movement, clicks, dragging, and scrolling
+  - label: Problem
+    title: Duplicate input from continuous sensor frames
+    points:
+      - A single pinch delivered across multiple tracking frames
+      - Generating a click on every frame would create duplicate clicks
+      - Needed drag-state management to distinguish start, hold, and end and emit press, move, and release events
+  - label: Approach
+    title: Debounce clicks and track drag state
+    points:
+      - Implemented service/device connections and a tracking-event polling loop with <code>leaprs</code>
+      - Detected gestures using palm coordinates, finger state, pinch distance, and grab strength
+      - Recorded the last click time and ignored further clicks within 300ms
+      - Used <code>is_dragging</code> to emit press on grab start, move while held, and release on completion
+      - Separated sensor recognition from OS mouse control through <code>MouseOperation</code> and generated input with <code>enigo</code>
+  - label: Implementation
+    title: Connect real-time tracking to OS input
+    points:
+      - Mapped hand coordinates to absolute screen positions for movement, clicks, dragging, and scrolling
+      - Converted continuous sensor events into state-based mouse input
+---

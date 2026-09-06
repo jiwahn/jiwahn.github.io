@@ -1,0 +1,76 @@
+- id: urunc
+  title: urunc · LFX Mentorship
+  url: /lfx-mentorship/
+  context: Runtime · LFX Mentorship
+  summary: Traced OCI image metadata propagation and implemented shim-side containerd queries and runtime-spec injection
+  evidence: Compared design alternatives · Measured ~3ms lookup overhead
+  tech: [Go, OCI, containerd]
+- id: opensource
+  title: Open-source contributions
+  url: /projects/opensource/
+  context: Podman · Buildah · nerdctl · RustPython
+  summary: Security settings, cleanup, and volume behavior in container tools; WASM/WASI functionality and tests in RustPython
+  tech: [Go, Rust, Python, WASM/WASI]
+- id: cloud
+  title: CLODIS Cloud
+  url: /cloud-infrastructure/
+  context: Research infrastructure · 2026
+  summary: Built a three-node RKE2 environment for VMs, containers, and GPU workloads; verified permissions and quotas and resolved a VPN access failure
+  evidence: 132 logical CPUs · 2 registered GPUs · VM lifecycle and connectivity checks
+  tech: [RKE2, KubeVirt, Rancher, GPU]
+- id: 42seoul
+  title: 42 Seoul
+  url: /42seoul/
+  context: Systems programming · 42 Seoul
+  summary: C/C++ projects covering an IRC server, Unix shell, x86 kernel, concurrency, and object-oriented programming
+  collection: 42seoul
+  tech: [C, C++, Unix, TCP]
+- id: ft-irc
+  group: 42seoul
+  title: ft_irc
+  url: /projects/ft-irc/
+  context: Network server · 42 Seoul
+  summary: Built a multi-client IRC server with kqueue, per-client receive buffers, connection-state tracking, and file-descriptor cleanup
+  evidence: Three-person team · Server and protocol implementation
+  tech: [C++, TCP, kqueue]
+- id: minishell
+  group: 42seoul
+  title: minishell
+  url: /projects/minishell/
+  context: Unix shell · 42 Seoul
+  summary: Implemented command parsing, process execution, pipelines, and redirection in a Unix shell
+  tech: [C, POSIX, Processes]
+- id: kfs
+  group: 42seoul
+  title: KFS
+  url: /projects/kfs/
+  context: Operating systems · 42 Seoul
+  summary: Built an x86 kernel with Multiboot2 boot, higher-half paging, VGA output, and keyboard input
+  tech: [C, Assembly, x86]
+- id: hiperjoy
+  title: Hiperjoy
+  url: /projects/hiperjoy/
+  context: Desktop application · Hiperwall
+  summary: Built a touchless-input prototype translating Leap Motion hand tracking into mouse movement, clicks, dragging, and scrolling
+  tech: [Rust, leaprs, enigo]
+- id: aeye
+  title: A-EYE
+  url: /projects/aeye/
+  context: Smart surveillance · Frontend
+  summary: Built a Next.js camera-monitoring UI and reduced thumbnail canvas resolution, comparing processing times in a reproduction experiment
+  evidence: "Reproduction experiment: median canvas processing 13.7ms → 3.3ms"
+  tech: [Next.js, TypeScript, Recoil]
+- id: philosophers
+  group: 42seoul
+  title: philosophers
+  url: /projects/philosophers/
+  context: Concurrency · 42 Seoul
+  summary: Implemented Dining Philosophers with pthread and mutexes, synchronizing shared resources and ordering lock acquisition to prevent deadlock
+  tech: [C, pthread, Mutex]
+- id: cpp-modules
+  group: 42seoul
+  title: C++ Modules
+  url: /projects/cpp-modules/
+  context: Object-oriented programming · 42 Seoul
+  summary: Progressive C++ exercises in object lifetime, copy control, inheritance, polymorphism, exceptions, templates, and STL
+  tech: [C++, OOP, STL]

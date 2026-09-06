@@ -1,0 +1,76 @@
+---
+title: Hiperjoy
+lang: ko
+tags: [frontend, Rust, hardware-integration]
+eyebrow: "Hiperwall · Desktop application"
+lead: "Leap Motion 손 추적 데이터를 마우스 입력으로 변환하는 Rust 기반 비접촉 입력 프로토타입"
+links:
+  - url: "https://github.com/jiwahn/Hiperjoy"
+    label: "View source ↗"
+---
+
+<dl class="case-meta">
+  <div>
+    <dt>기간</dt>
+    <dd>2024.03 – 2024.06</dd>
+  </div>
+  <div>
+    <dt>인원</dt>
+    <dd>1명</dd>
+  </div>
+  <div>
+    <dt>역할</dt>
+    <dd>제스처 입력 프로토타입 구현</dd>
+  </div>
+  <div>
+    <dt>기술</dt>
+    <dd>Rust · leaprs · enigo</dd>
+  </div>
+</dl>
+<section class="case-section">
+  <div class="story-label">프로젝트 소개</div>
+  <div>
+    <h2>손동작으로 조작하는 비접촉 입력</h2>
+    <ul>
+      <li>Hiperwall 멀티스크린 환경을 위한 제스처 입력 프로토타입</li>
+      <li>Leap Motion 2의 손 추적 데이터를 이동·클릭·드래그·스크롤로 변환</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">문제 상황</div>
+  <div>
+    <h2>연속 센서 프레임으로 인한 중복 입력</h2>
+    <ul>
+      <li>한 번의 pinch 동작이 여러 tracking frame으로 전달되는 구조</li>
+      <li>프레임마다 클릭을 발생시키면 중복 클릭 발생</li>
+      <li>드래그 시작·유지·종료를 구분해 press·move·release를 처리할 상태 관리 필요</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">해결 과정</div>
+  <div>
+    <h2>입력 간격 제한과 드래그 상태 관리</h2>
+    <ul>
+      <li><code>leaprs</code>로 서비스·디바이스 연결 및 tracking event polling loop 구현</li>
+      <li>손바닥 좌표·손가락 상태·pinch distance·grab strength를 기준으로 제스처 판별</li>
+      <li>마지막 클릭 시각을 기록하고 300ms 이내의 추가 입력을 무시하는 debounce 적용</li>
+      <li><code>is_dragging</code> 상태로 grab 시작 시 press, 유지 중 move, 종료 시 release 처리</li>
+      <li>센서 인식과 OS 마우스 제어를 <code>MouseOperation</code>으로 분리하고 <code>enigo</code>로 입력 생성</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">구현 범위</div>
+  <div>
+    <h2>실시간 손 추적과 OS 입력 연결</h2>
+    <ul>
+      <li>손 좌표를 화면의 절대 위치로 변환하고 이동·클릭·드래그·스크롤에 연결</li>
+      <li>연속적인 센서 이벤트를 상태 기반 마우스 입력으로 변환</li>
+    </ul>
+  </div>
+</section>

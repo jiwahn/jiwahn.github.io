@@ -1,0 +1,10 @@
+<section class="home-section home-about" id="about" aria-labelledby="about-heading">
+  <p class="section-label">01 / About</p>
+  <h2 id="about-heading">{{ ui.about }}</h2>
+  {% for paragraph in ui.introduction %}<p>{{ paragraph | escape }}</p>{% endfor %}
+  <div class="focus-list" aria-label="{{ ui.focus }}">
+    <span>Linux &amp; systems</span>
+    <span>Container runtimes</span>
+    <span>Cloud infrastructure</span>
+  </div>
+</section>

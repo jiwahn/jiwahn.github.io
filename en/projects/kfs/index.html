@@ -1,0 +1,48 @@
+---
+title: KFS
+layout: case
+lang: en
+tags: [42 Seoul, C programming, operating-systems]
+eyebrow: Operating systems · 42 Seoul
+lead: An x86 kernel connecting Multiboot2 boot, higher-half paging, keyboard input, and VGA output
+links:
+  - {url: 'https://github.com/4kfs2/kfs', label: 'View source ↗'}
+meta:
+  - {label: Period, value: 2022.07 – 2023.12}
+  - {label: Team, value: 2 people}
+  - {label: Role, value: Kernel boot · Memory · Terminal implementation}
+  - {label: Technologies, value: C · Assembly · GNU linker}
+sections:
+  - label: Overview
+    title: A kernel from boot to command input
+    points:
+      - Two-person project building the execution environment normally provided by an OS
+      - Implemented the assembly entry point, C kernel initialization, memory mapping, and hardware I/O
+  - label: Problem
+    title: Paging transitions and hardware access
+    points:
+      - Physical load and virtual execution addresses differ; instructions, stack, and screen memory must remain mapped across the paging transition
+      - Needed direct keyboard and display access without an OS providing standard I/O
+  - label: Approach
+    title: Address mapping and device I/O
+    id: higher-half-paging
+    points:
+      - Set up the Multiboot2 header, assembly entry point, and initial stack before handing control to <code>kernel_main()</code>
+      - Separated virtual/load addresses in <code>linker.ld</code> and used a higher-half layout with a <code>0x80000000</code> offset
+      - Mapped the same page table into low and high regions to maintain access during the transition
+      - Loaded the page-directory physical address into CR3, enabled the CR0 paging bit, and branched to the higher address
+      - Polled the keyboard status port and converted scancodes read by <code>inb()</code> into characters
+      - Mapped VGA memory at <code>0xB8000</code> for characters/colors, newlines, scrolling, and cursor updates through <code>outb()</code>
+  - label: Implementation
+    title: Basic terminal and boot-information handling
+    points:
+      - Implemented a <code>kfs$</code> command loop connecting VGA output, keyboard input, and <code>reboot</code>
+      - Wrote Multiboot memory-map/ELF-symbol parsing and GDT descriptor construction
+      - GDT initialization and boot-information parsing calls are commented out in <code>kernel_main()</code>, separate from the default execution path
+  - label: Execution flow
+    title: From boot to terminal
+    points:
+      - GRUB → assembly boot code, paging, and stack setup → <code>kernel_main()</code> → keyboard input, VGA output, and commands
+    diagrams:
+      - {src: /assets/images/diagrams/kfs-architecture.svg, alt: KFS boot and command-loop architecture, caption: Address layout in boot.s/linker.ld and kernel execution paths}
+---

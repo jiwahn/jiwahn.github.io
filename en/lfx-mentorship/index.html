@@ -1,0 +1,47 @@
+---
+title: urunc · LFX Mentorship
+hero_title: urunc
+layout: case
+lang: en
+tags: [mentorship, cloud-native, containers, unikernels, opensource-contribution]
+eyebrow: LFX Mentorship · CNCF · Spring 2026
+lead: Traced image metadata propagation and implemented shim functionality in urunc through LFX Mentorship
+links:
+  - {url: 'https://github.com/urunc-dev/urunc', label: 'GitHub ↗'}
+meta:
+  - {label: Period, value: 2026.03 – 2026.05}
+  - {label: Role, value: Metadata-path investigation · PoC · Shim implementation}
+  - {label: Technologies, value: Go · OCI · containerd}
+  - {label: Collaboration, value: Nine weekly syncs with maintainers}
+sections:
+  - label: Overview
+    title: Unikernels and urunc
+    points:
+      - '<a href="https://unikraft.org/docs/concepts">Unikernels</a> combine an application and the operating-system functionality it needs into a single executable image'
+      - '<a href="https://urunc.io/">urunc</a> is an OCI runtime for deploying and running unikernels with existing container tools'
+      - Runs OCI-packaged unikernels through VMMs or sandbox monitors and integrates with containerd and Kubernetes
+  - label: Problem
+    title: Missing runtime metadata
+    id: metadata-path
+    points:
+      - Unikernel binary paths, hypervisor settings, and other execution metadata stored in OCI image annotations
+      - In the investigated containerd execution path, image annotations were not automatically propagated to the runtime configuration file, <code>config.json</code>
+      - Needed a metadata path that made the image's execution information available to urunc
+  - label: Approach
+    title: Query metadata in the shim and populate the runtime spec
+    points:
+      - Chose to query image metadata directly in the shim connecting containerd and urunc, immediately before container creation
+      - Investigated CRI and non-CRI paths and compared image-annotation and config-label propagation
+      - Implemented a Session layer for containerd connections and container metadata lookup
+      - Queried manifest annotations and config labels to fill missing information in <code>config.json</code>
+      - 'Precedence: existing runtime-spec annotations → manifest annotations → config labels'
+  - label: Integration & verification
+    title: Two merged PRs and measured lookup overhead
+    points:
+      - Two merged PRs implementing the containerd access layer and annotation injection
+      - Measured approximately 3ms annotation/label lookup overhead in the PoC
+    links:
+      - {url: 'https://github.com/urunc-dev/urunc/pull/657', label: '#657', title: 'feat(shim): add task wrapper and containerd access session'}
+      - {url: 'https://github.com/urunc-dev/urunc/pull/565', label: '#565', title: Feat/inject missing annot in shim}
+      - {url: 'https://github.com/urunc-dev/urunc/discussions/525#discussioncomment-16326113', label: Investigation, title: containerd annotation propagation}
+---

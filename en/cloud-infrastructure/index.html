@@ -1,0 +1,67 @@
+---
+title: CLODIS Cloud
+layout: case
+lang: en
+description: Three-node RKE2 research cluster with KubeVirt VM self-service, per-user access and resource policies, and VPN troubleshooting.
+tags: [Kubernetes, KubeVirt, cloud-native, infrastructure, virtualization, GPU, storage]
+eyebrow: Research infrastructure · Private cloud
+lead: An RKE2 environment for VMs, containers, and GPU workloads across three research servers
+meta:
+  - {label: Role, value: Infrastructure design · Deployment · Verification}
+  - {label: Configuration, value: 3 nodes · 2 GPUs registered in Kubernetes}
+  - {label: Technologies, value: RKE2 · Rancher · KubeVirt · CDI}
+  - {label: Records, value: 'Configuration: 2026.10.22<br>Functional checks: 2026.10.15–16'}
+sections:
+  - label: Overview
+    title: Per-user VMs and GPU workloads
+    id: scope-title
+    points:
+      - Three-node Kubernetes cluster managing the lab's VM and container resources
+      - Self-service VM and disk management through authenticated APIs and CLI tools
+      - Rancher authentication and cluster management; Kubernetes Jobs and vLLM for GPU workloads
+  - label: Infrastructure
+    title: Three nodes with node-local storage
+    id: architecture-title
+    points:
+      - 'CP: control plane, etcd, and workloads; Worker 1 and Worker 2: worker nodes'
+      - KubeVirt and CDI for VMs and disk images; local-path PV/PVC storage
+      - '132 logical CPUs: CP 64 · Worker 1 12 · Worker 2 56'
+      - 'Kubernetes-reported memory: approximately 1,316.7GiB — CP 251.5GiB · Worker 1 62.4GiB · Worker 2 1,002.7GiB'
+      - 'Registered GPUs: one Quadro RTX 6000 and one GeForce RTX 5090'
+      - 10 personal namespaces; 9 accounts with VM/disk management access and 1 read-only account
+      - RKE2 Canal pod overlay between nodes over Tailscale
+    diagrams:
+      - src: /assets/images/diagrams/lab-cloud-architecture.svg
+        alt: Three-node RKE2 cluster with CP and two workers; GPU driver validation pending on Worker 2
+  - label: Implementation & verification
+    title: VM and disk management with user permissions
+    id: selfservice-title
+    points:
+      - Configured KubeVirt, CDI, and per-user RBAC for VM creation from approved Ubuntu images and data-disk attachment
+      - SSH through Kubernetes API port-forwarding with Rancher user authentication and guest public-key authentication
+      - Verified VM and root-disk creation through the user API after signing in with an undergraduate researcher account
+      - Verified 10GiB data-disk creation, attachment, and SSH access into the VM
+      - Verified root- and data-disk files persisted across VM stop/start
+      - Verified VM, Service, and disk deletion through the user API
+  - label: Access & resource policies
+    title: Verified allowed operations and rejected requests
+    id: policy-title
+    points:
+      - Configured per-namespace RBAC, ResourceQuota, NetworkPolicy, and ValidatingAdmissionPolicy
+      - Verified denial of VM API access to another user's namespace
+      - Verified rejection of a 41GiB PVC request against a 40GiB aggregate request limit
+      - Server dry-run rejected hostDisk usage and mismatched CPU requests/limits
+      - GPU Jobs from four graduate-student accounts completed with exit code 0
+      - Verified rejection of two-GPU requests, privileged Jobs, and cross-namespace requests; blocked Jobs exceeding the one-GPU quota
+  - label: Troubleshooting
+    title: Resolved Rancher VPN access failure
+    id: network-title
+    points:
+      - 'Symptom: direct access through the VPN timed out while access through an SSH tunnel worked'
+      - Compared interface traffic with tcpdump; responses to VPN requests left through a different tunnel
+      - Calico packet marks overlapped with Tailscale policy-routing conditions, selecting the wrong return route
+      - Separated Calico's mark bits, persisted the setting in RKE2 HelmChartConfig, and rolled Canal Pods sequentially
+      - Verified HTTP 200 over direct VPN access with CA certificate validation
+      - All 11 connectivity checks passed before and after the change, including cross-node Pod communication, 256KiB transfer, DNS, Services, and namespace isolation
+      - Existing workload status and restart counts remained unchanged
+---

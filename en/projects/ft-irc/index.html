@@ -1,0 +1,46 @@
+---
+title: ft_irc
+layout: case
+lang: en
+tags: [42 Seoul, C++, networking, system-programming]
+eyebrow: Network server · 42 Seoul · 3-person team
+lead: A multi-client IRC server built with C++, TCP, and kqueue
+links:
+  - {url: 'https://github.com/jiwahn/ft_irc', label: 'View source ↗'}
+meta:
+  - {label: Period, value: 2023.02 – 2024.01}
+  - {label: Team, value: 3 people}
+  - {label: Role, value: Server · Protocol implementation}
+  - {label: Technologies, value: C++ · TCP · kqueue}
+sections:
+  - label: Overview
+    title: IRC channels and private messages
+    points:
+      - Implemented network connections, user state, and IRC command handling based on RFC 1459
+      - Responsible for server and protocol handling in a three-person team
+  - label: Problem
+    title: TCP reads do not align with IRC command boundaries
+    points:
+      - TCP delivers a byte stream rather than discrete messages
+      - One <code>recv()</code> may contain a partial command or multiple commands
+  - label: Approach
+    title: Per-client buffers and event-driven command handling
+    points:
+      - Kept a receive buffer per client and sent only complete newline-terminated messages to <code>CommandInvoker</code>
+      - Implemented non-blocking socket creation, bind, listen, and accept
+      - Used a <code>kqueue</code> loop for multi-client read/write events
+      - Implemented Client, Channel, and User state and command dispatch for PASS, NICK, JOIN, PRIVMSG, and other commands
+      - Cleaned up client state and file descriptors on disconnects and errors
+  - label: Implementation
+    title: Multiple connections, channels, and private messages
+    points:
+      - Preserved IRC command boundaries across fragmented or coalesced TCP reads
+      - Built an event-driven server supporting channel conversations and private messages
+  - label: Message flow
+    title: Separate event handling, command dispatch, and server state
+    points:
+      - Component diagram for event handling and command flow; class diagram for server, command, and IRC-object responsibilities
+    diagrams:
+      - {src: /assets/images/diagrams/ft-irc-uml-component.png, alt: ft_irc UML component diagram, caption: Event loop, parsing, command dispatch, and server state}
+      - {src: /assets/images/diagrams/ft-irc-uml-class.png, alt: ft_irc UML class diagram, caption: Server, command dispatch, and IRC domain objects}
+---

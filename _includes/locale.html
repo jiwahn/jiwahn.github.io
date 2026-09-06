@@ -1,0 +1,5 @@
+{% assign language = page.lang | default: site.lang %}
+{% assign ui = site.data.locales[language] %}
+{% assign locale_prefix = '' %}
+{% if language == 'en' %}{% assign locale_prefix = '/en' %}{% endif %}
+{% assign home_url = locale_prefix | append: '/' %}

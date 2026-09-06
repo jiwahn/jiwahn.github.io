@@ -1,0 +1,13 @@
+<header class="site-header">
+  <a class="site-brand" href="{{ home_url | relative_url }}">Jiwoo Ahn</a>
+  <nav class="site-nav" aria-label="Primary navigation">
+    <a href="{{ home_url | relative_url }}#projects">Projects</a>
+    <a href="{{ home_url | relative_url }}#experience">Experience</a>
+    <a href="https://github.com/jiwahn">GitHub ↗</a>
+  </nav>
+  <nav class="language-switch" aria-label="Language">
+    <a href="{{ korean_path | relative_url }}" lang="ko" hreflang="ko" data-language-choice="ko"{% if language == 'ko' %} aria-current="true"{% endif %}>KO</a>
+    <span aria-hidden="true">/</span>
+    <a href="{{ english_path | relative_url }}" lang="en" hreflang="en" data-language-choice="en"{% if language == 'en' %} aria-current="true"{% endif %}>EN</a>
+  </nav>
+</header>

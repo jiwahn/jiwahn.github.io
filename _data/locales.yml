@@ -1,0 +1,40 @@
+ko:
+  skip: 본문으로 건너뛰기
+  about: 소개
+  projects: 프로젝트
+  experience: 경력 및 교육
+  projects_note: 오픈소스 기여 · 인프라 구축 · 시스템·제품 개발
+  filters: 분야별 프로젝트 필터
+  empty: 해당하는 프로젝트가 없습니다. 전체 필터를 선택해 보세요.
+  technologies: 사용 기술
+  tags: 프로젝트 태그
+  navigation: 페이지 내 탐색
+  focus: 주요 기술 분야
+  contact: LinkedIn에서 연락하기
+  analytics: 방문 통계 설정
+  description: 시스템 소프트웨어와 클라우드 네이티브, 오픈소스 기여를 다루는 Jiwoo Ahn의 포트폴리오.
+  profile: 컨테이너 런타임 · 시스템 소프트웨어 개발
+  introduction:
+    - 재사용성과 확장성을 고려한 코드, 이해하기 쉬운 구조, 설명 가능한 기술 선택을 기준으로 개발합니다.
+    - C/C++ 직접 구현으로 시스템 기초를 다졌고, 컨테이너 런타임 개발과 3노드 연구실 클라우드 구축으로 범위를 넓혀오며 시스템의 동작과 문제 원인을 파악하기 쉬운 소프트웨어에 관심을 두고 있습니다.
+    - 시스템 소프트웨어를 공부하며 쌓은 지식을 바탕으로 장애에 강한 인프라를 설계하고, 필요한 곳에 AI를 활용해 반복 작업을 줄이며, 기술적 판단을 동료와 명확히 공유하는 엔지니어로 성장하고자 합니다.
+en:
+  skip: Skip to content
+  about: About
+  projects: Projects
+  experience: Experience & Education
+  projects_note: Open-source contributions · Infrastructure · Systems & application development
+  filters: Filter projects by field
+  empty: No matching projects. Try the All filter.
+  technologies: Technologies
+  tags: Project tags
+  navigation: On this page
+  focus: Areas of focus
+  contact: Get in touch on LinkedIn
+  analytics: Analytics preferences
+  description: Jiwoo Ahn's portfolio of systems software, cloud-native infrastructure, and open-source contributions.
+  profile: Container runtimes · Systems software development
+  introduction:
+    - I value reusable, extensible code, clear project structure, and technical decisions I can explain.
+    - I built my systems foundations through hands-on C/C++ projects, then expanded into container runtime development and a three-node research cloud. I am interested in software that makes system behavior and the causes of failures easier to understand.
+    - I aim to apply my systems knowledge to resilient infrastructure, use AI where it can reduce repetitive work, and communicate technical decisions clearly with teammates.

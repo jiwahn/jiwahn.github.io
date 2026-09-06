@@ -1,0 +1,92 @@
+---
+title: A-EYE
+lang: ko
+tags: [frontend, TypeScript, video-processing]
+eyebrow: "Smart surveillance · Frontend"
+lead: "카메라 피드·검색·리포트를 제공하는 Next.js 기반 스마트 관제 프론트엔드"
+links:
+  - url: "https://github.com/KNU-AEYE/AEYE-FE"
+    label: "View source ↗"
+  - url: "https://www.a-eye.live/"
+    label: "View demo ↗"
+---
+
+<dl class="case-meta">
+  <div>
+    <dt>기간</dt>
+    <dd>2024.03 – 2024.06</dd>
+  </div>
+  <div>
+    <dt>인원</dt>
+    <dd>3명</dd>
+  </div>
+  <div>
+    <dt>역할</dt>
+    <dd>프론트엔드</dd>
+  </div>
+  <div>
+    <dt>기술</dt>
+    <dd>Next.js · TypeScript · Recoil</dd>
+  </div>
+</dl>
+<section class="case-section">
+  <div class="story-label">프로젝트 소개</div>
+  <div>
+    <h2>카메라 데이터와 검색 결과를 다루는 관제 UI</h2>
+    <ul>
+      <li>3인 팀 프로젝트에서 프론트엔드 담당</li>
+      <li>로그인·프로필·리포트·카메라 피드·검색 화면 구현</li>
+      <li>Next.js App Router·공통 레이아웃·Recoil 전역 상태 구성, API 호출을 wrapper로 분리</li>
+      <li>MUI와 Docker 기반 개발·배포 구성 적용</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">문제 상황</div>
+  <div>
+    <h2 id="thumbnail-performance">썸네일 생성 시 불필요한 원본 해상도 처리</h2>
+    <ul>
+      <li>CCTV 검색 결과의 썸네일 생성 지연</li>
+      <li>작은 목록 이미지에도 원본 영상 해상도와 같은 크기의 canvas를 사용하는 처리 경로 확인</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">해결 과정</div>
+  <div>
+    <h2>표시 용도에 맞춰 canvas 해상도 축소</h2>
+    <ul>
+      <li>썸네일 생성 경로의 canvas 가로·세로를 각각 1/4로 축소</li>
+      <li>처리 화소 수 93.75% 감소</li>
+      <li>원본 영상이 아닌 목록 표시용 썸네일에 한정해 적용</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">검증 및 성과</div>
+  <div>
+    <h2>재현 실험으로 처리 시간 비교</h2>
+    <ul>
+      <li>동일 로직 재현 실험의 canvas 처리 중앙값: 13.7ms → 3.3ms, 75.9% 감소</li>
+      <li>12개 영상의 불러오기·탐색·canvas 처리를 포함한 전체 썸네일 생성 중앙값: 458.1ms → 346.6ms, 24.3% 감소</li>
+      <li>교과목 A+ 및 대한전자공학회 인공지능학부생 논문경진대회 장려상</li>
+    </ul>
+  </div>
+</section>
+
+<section class="diagram-section">
+  <div class="story-label">화면 구성</div>
+  <div>
+    <h2>페이지·상태·API의 역할 분리</h2>
+    <ul>
+      <li>App Router 페이지 → 공통 UI 컴포넌트 → Recoil 상태·API wrapper → 백엔드</li>
+    </ul>
+  </div>
+  <figure class="diagram-card">
+    <img src="/assets/images/diagrams/aeye-component-diagram.svg" alt="A-EYE component diagram">
+    <figcaption>페이지·UI 컴포넌트·클라이언트 상태·API·백엔드의 연결 구조</figcaption>
+  </figure>
+</section>

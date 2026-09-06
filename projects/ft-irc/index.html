@@ -1,0 +1,94 @@
+---
+title: ft_irc
+lang: ko
+tags: [42 Seoul, C++, networking, system-programming]
+eyebrow: "Network server · 42 Seoul · 3-person team"
+lead: "C++·TCP·kqueue 기반 다중 클라이언트 IRC 서버"
+links:
+  - url: "https://github.com/jiwahn/ft_irc"
+    label: "View source ↗"
+---
+
+<dl class="case-meta">
+  <div>
+    <dt>기간</dt>
+    <dd>2023.02 – 2024.01</dd>
+  </div>
+  <div>
+    <dt>인원</dt>
+    <dd>3명</dd>
+  </div>
+  <div>
+    <dt>역할</dt>
+    <dd>서버 · 프로토콜 구현</dd>
+  </div>
+  <div>
+    <dt>기술</dt>
+    <dd>C++ · TCP · kqueue</dd>
+  </div>
+</dl>
+<section class="case-section">
+  <div class="story-label">프로젝트 소개</div>
+  <div>
+    <h2>채널·개인 메시지를 지원하는 IRC 서버</h2>
+    <ul>
+      <li>RFC 1459를 바탕으로 네트워크 연결·사용자 상태·IRC 명령 처리 구현</li>
+      <li>3인 팀 프로젝트에서 서버 및 프로토콜 처리 담당</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">문제 상황</div>
+  <div>
+    <h2>TCP 수신 데이터와 IRC 명령 경계의 불일치</h2>
+    <ul>
+      <li>TCP는 메시지 단위가 아닌 바이트 스트림으로 데이터 전달</li>
+      <li>한 번의 <code>recv()</code>에서 명령 일부만 수신하거나 여러 명령을 함께 수신하는 상황 처리 필요</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">해결 과정</div>
+  <div>
+    <h2>클라이언트별 버퍼와 이벤트 기반 명령 처리</h2>
+    <ul>
+      <li>클라이언트별 수신 버퍼를 유지하고 줄바꿈까지 수신된 완성 메시지만 <code>CommandInvoker</code>로 전달</li>
+      <li>non-blocking 소켓의 생성·bind·listen·accept 흐름 구현</li>
+      <li><code>kqueue</code> 이벤트 루프로 여러 클라이언트의 read/write 이벤트 처리</li>
+      <li>Client·Channel·User 상태와 PASS·NICK·JOIN·PRIVMSG 등 명령 디스패치 구현</li>
+      <li>연결 종료·오류 발생 시 클라이언트 상태와 파일 디스크립터 정리</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">구현 범위</div>
+  <div>
+    <h2>다중 연결·채널·개인 메시지 처리</h2>
+    <ul>
+      <li>분할되거나 합쳐진 수신 데이터에서도 IRC 명령 경계 보존</li>
+      <li>채널 대화와 개인 메시지를 지원하는 이벤트 기반 서버 구현</li>
+    </ul>
+  </div>
+</section>
+
+<section class="diagram-section">
+  <div class="story-label">메시지 처리 구조</div>
+  <div>
+    <h2>이벤트 루프·명령 디스패치·서버 상태를 구분한 구조</h2>
+    <ul>
+      <li>컴포넌트 다이어그램: 이벤트 처리와 명령 전달 흐름</li>
+      <li>클래스 다이어그램: 서버·명령 처리·IRC 객체의 역할</li>
+    </ul>
+  </div>
+  <figure class="diagram-card">
+    <img src="/assets/images/diagrams/ft-irc-uml-component.png" alt="ft_irc UML component diagram">
+    <figcaption>이벤트 루프·파싱·명령 디스패치·서버 상태의 연결 구조</figcaption>
+  </figure>
+  <figure class="diagram-card">
+    <img src="/assets/images/diagrams/ft-irc-uml-class.png" alt="ft_irc UML class diagram">
+    <figcaption>서버·명령 디스패치·IRC 도메인 객체의 역할</figcaption>
+  </figure>
+</section>
