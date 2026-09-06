@@ -1,0 +1,99 @@
+---
+title: urunc · LFX Mentorship
+lang: ko
+tags: [mentorship, cloud-native, containers, unikernels, opensource-contribution]
+hero_title: "urunc"
+eyebrow: "LFX Mentorship · CNCF · Spring 2026"
+lead: "LFX Mentorship · urunc의 이미지 메타데이터 전달 경로 분석 및 shim 기능 구현"
+links:
+  - url: "https://github.com/urunc-dev/urunc"
+    label: "GitHub ↗"
+---
+
+<dl class="case-meta">
+  <div>
+    <dt>기간</dt>
+    <dd>2026.03 – 2026.05</dd>
+  </div>
+  <div>
+    <dt>역할</dt>
+    <dd>전달 경로 분석 · PoC · shim 구현</dd>
+  </div>
+  <div>
+    <dt>기술</dt>
+    <dd>Go · OCI · containerd</dd>
+  </div>
+  <div>
+    <dt>협업</dt>
+    <dd>메인테이너와 주간 sync 9회</dd>
+  </div>
+</dl>
+
+<section class="case-section">
+  <div class="story-label">프로젝트 소개</div>
+  <div>
+    <h2>유니커널과 urunc</h2>
+    <ul>
+      <li><a href="https://unikraft.org/docs/concepts">유니커널</a>: 애플리케이션과 실행에 필요한 운영체제 기능을 하나의 실행 이미지로 묶는 방식</li>
+      <li><a href="https://urunc.io/">urunc</a>: 유니커널을 기존 컨테이너 도구로 배포하고 실행할 수 있게 하는 OCI 런타임</li>
+      <li>OCI 이미지에 담긴 유니커널을 VMM 또는 샌드박스 모니터로 실행하고, containerd·Kubernetes와 연동</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">문제 상황</div>
+  <div>
+    <h2 id="metadata-path">실행에 필요한 메타데이터 누락</h2>
+    <ul>
+      <li>유니커널 바이너리 경로·하이퍼바이저 등 실행 정보를 OCI 이미지의 annotation에 저장</li>
+      <li>조사한 containerd 실행 경로에서 이미지 annotation이 런타임 설정 파일인 <code>config.json</code>에 자동으로 반영되지 않는 문제 확인</li>
+      <li>이미지에 저장된 실행 정보를 urunc가 읽을 수 있도록 메타데이터 전달 경로 보완 필요</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">해결 과정</div>
+  <div>
+    <h2>shim에서 직접 조회해 실행 설정에 반영</h2>
+    <ul>
+      <li>containerd와 urunc를 연결하는 shim에서 컨테이너 생성 직전에 이미지 메타데이터를 직접 조회하는 방식 채택</li>
+      <li>containerd의 CRI·non-CRI 경로 분석 및 이미지 annotation·config label 전달 방식 비교</li>
+      <li>containerd 연결과 컨테이너 메타데이터 조회를 담당하는 Session 계층 구현</li>
+      <li>manifest annotation과 config label을 조회해 <code>config.json</code>의 누락 정보 보완</li>
+      <li>메타데이터 적용 우선순위: 기존 실행 설정의 annotation → manifest annotation → config label</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">반영 및 검증</div>
+  <div>
+    <h2>PR 2건 머지 및 조회 오버헤드 측정</h2>
+    <ul>
+      <li>containerd 접근 계층과 annotation 주입 기능을 각각 구현한 PR 2건 머지</li>
+      <li>PoC에서 annotation·label 조회 오버헤드 약 3ms 측정</li>
+    </ul>
+    <ul class="pr-list">
+      <li>
+        <a class="pr-row" href="https://github.com/urunc-dev/urunc/pull/657" aria-labelledby="urunc-657">
+          <p class="pr-number">#657</p>
+          <h3 id="urunc-657">feat(shim): add task wrapper and containerd access session</h3>
+        </a>
+      </li>
+      <li>
+        <a class="pr-row" href="https://github.com/urunc-dev/urunc/pull/565" aria-labelledby="urunc-565">
+          <p class="pr-number">#565</p>
+          <h3 id="urunc-565">Feat/inject missing annot in shim</h3>
+        </a>
+      </li>
+      <li>
+        <a class="pr-row" href="https://github.com/urunc-dev/urunc/discussions/525#discussioncomment-16326113" aria-labelledby="urunc-investigation">
+          <p class="pr-number">조사 기록</p>
+          <h3 id="urunc-investigation">containerd annotation 전달 경로</h3>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

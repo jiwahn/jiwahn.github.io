@@ -1,0 +1,86 @@
+- id: "urunc"
+  title: "urunc · LFX Mentorship"
+  url: "/lfx-mentorship/"
+  context: "Runtime · LFX Mentorship"
+  summary: "OCI 이미지 메타데이터 전달 경로 분석, shim의 containerd 조회·runtime spec 반영 기능 구현"
+  evidence: "설계 대안 비교 · 조회 오버헤드 약 3ms 측정"
+  tech: ["Go","OCI","containerd"]
+
+- id: "opensource"
+  title: "오픈소스 기여"
+  url: "/projects/opensource/"
+  context: "Podman · Buildah · nerdctl · RustPython"
+  summary: "컨테이너 도구의 보안 설정·상태 정리·볼륨 동작 개선, RustPython의 WASM/WASI 기능·테스트 보완"
+  tech: ["Go","Rust","Python","WASM/WASI"]
+
+- id: "cloud"
+  title: "CLODIS Cloud"
+  url: "/cloud-infrastructure/"
+  context: "Research infrastructure · 2026"
+  summary: "3노드 RKE2 기반 VM·컨테이너·GPU 작업 환경 구축, 사용자 권한·쿼터 검증 및 VPN 접속 장애 해결"
+  evidence: "논리 CPU 132개 · Kubernetes 등록 GPU 2장 · VM 생명주기·연결성 검증"
+  tech: ["RKE2","KubeVirt","Rancher","GPU"]
+
+- id: "42seoul"
+  title: "42 Seoul"
+  url: "/42seoul/"
+  context: "Systems programming · 42 Seoul"
+  summary: "C/C++ 기반 IRC 서버·Unix shell·x86 커널·동시성·객체지향 프로젝트"
+  collection: "42seoul"
+  tech: ["C", "C++", "Unix", "TCP"]
+
+- id: "ft-irc"
+  group: "42seoul"
+  title: "ft_irc"
+  url: "/projects/ft-irc/"
+  context: "Network server · 42 Seoul"
+  summary: "kqueue 기반 다중 클라이언트 IRC 서버 구현, 수신 버퍼를 통한 명령 경계 보존 및 연결 상태·fd 관리"
+  evidence: "3인 팀 · 서버·프로토콜 구현"
+  tech: ["C++","TCP","kqueue"]
+
+- id: "minishell"
+  group: "42seoul"
+  title: "minishell"
+  url: "/projects/minishell/"
+  context: "Unix shell · 42 Seoul"
+  summary: "명령 해석·프로세스 실행·파이프·리다이렉션을 연결한 Unix shell 구현"
+  tech: ["C","POSIX","Processes"]
+
+- id: "kfs"
+  group: "42seoul"
+  title: "KFS"
+  url: "/projects/kfs/"
+  context: "Operating systems · 42 Seoul"
+  summary: "Multiboot2 부팅·higher-half 페이징·VGA 출력·키보드 입력을 연결한 x86 커널 구현"
+  tech: ["C","Assembly","x86"]
+
+- id: "hiperjoy"
+  title: "Hiperjoy"
+  url: "/projects/hiperjoy/"
+  context: "Desktop application · Hiperwall"
+  summary: "Leap Motion 손 추적 데이터를 마우스 이동·클릭·드래그·스크롤로 변환하는 비접촉 입력 프로토타입 구현"
+  tech: ["Rust","leaprs","enigo"]
+
+- id: "aeye"
+  title: "A-EYE"
+  url: "/projects/aeye/"
+  context: "Smart surveillance · Frontend"
+  summary: "Next.js 기반 카메라 관제 UI 구현, 썸네일 canvas 해상도 조정 및 처리 시간 비교 검증"
+  evidence: "재현 실험: canvas 처리 중앙값 13.7ms → 3.3ms"
+  tech: ["Next.js","TypeScript","Recoil"]
+
+- id: "philosophers"
+  group: "42seoul"
+  title: "philosophers"
+  url: "/projects/philosophers/"
+  context: "Concurrency · 42 Seoul"
+  summary: "pthread·mutex 기반 Dining Philosophers 구현, 공유 자원 동기화 및 lock 획득 순서 조정으로 교착 상태 방지"
+  tech: ["C","pthread","Mutex"]
+
+- id: "cpp-modules"
+  group: "42seoul"
+  title: "C++ Modules"
+  url: "/projects/cpp-modules/"
+  context: "Object-oriented programming · 42 Seoul"
+  summary: "객체 수명·복사 제어·상속·다형성·예외 처리·템플릿·STL을 단계별로 학습한 C++ 과정"
+  tech: ["C++","OOP","STL"]

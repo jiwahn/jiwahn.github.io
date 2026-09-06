@@ -1,0 +1,32 @@
+---
+title: 오픈소스 기여
+layout: default
+lang: ko
+tags: [opensource-contribution, containers, cloud-native, wasm, wasi]
+description: Podman, Buildah, nerdctl, RustPython에 기여한 PR 모음.
+---
+
+<article class="project-page">
+  <header class="opensource-header">
+    <a class="breadcrumb" href="{{ '/' | relative_url }}#projects">← Projects</a>
+    <h1>오픈소스 기여</h1>
+  </header>
+
+  {% for group in site.data.opensource.groups %}
+  <section class="opensource-group" id="{{ group.id }}" aria-labelledby="{{ group.id }}-heading">
+    {% assign repo_parts = group.repo | split: '/' %}
+    <h2 id="{{ group.id }}-heading"><span>{{ repo_parts.first | escape }}/</span>{{ repo_parts.last | escape }}</h2>
+    <ul class="pr-list">
+      {% assign sorted_prs = group.prs | sort: 'merged_at' | reverse %}
+      {% for pr in sorted_prs %}
+      <li>
+      <a class="pr-row" href="https://github.com/{{ group.repo }}/pull/{{ pr.number }}" aria-labelledby="{{ group.id }}-{{ pr.number }}">
+        <p class="pr-number">#{{ pr.number }}</p>
+        <h3 id="{{ group.id }}-{{ pr.number }}">{{ pr.title | escape }}</h3>
+      </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endfor %}
+</article>

@@ -1,0 +1,13 @@
+<div class="experience-list">
+  {% for entry in site.data.experience %}
+  <article class="experience-row">
+    <p class="experience-date">{{ entry.period | escape }}</p>
+    <div>
+      <p class="experience-context">{{ entry.organization | escape }}{% if entry.kind %} · {{ entry.kind | escape }}{% endif %}</p>
+      <h3>{% if entry.url %}<a href="{{ entry.url | relative_url }}">{{ entry.title | escape }} <span aria-hidden="true">↗</span></a>{% else %}{{ entry.title | escape }}{% endif %}</h3>
+      {% if entry.summary %}<p class="experience-summary">{{ entry.summary | escape }}</p>{% endif %}
+      {% include skill-tags.html items=entry.tech %}
+    </div>
+  </article>
+  {% endfor %}
+</div>

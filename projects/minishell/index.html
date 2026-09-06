@@ -1,0 +1,88 @@
+---
+title: minishell
+lang: ko
+tags: [42 Seoul, C programming, system-programming]
+eyebrow: "Unix shell · 42 Seoul · 2-person team"
+lead: "명령 해석·프로세스 실행·파이프·리다이렉션을 구현한 Unix shell"
+links:
+  - url: "https://github.com/jiwahn/minishell"
+    label: "View source ↗"
+---
+
+<dl class="case-meta">
+  <div>
+    <dt>기간</dt>
+    <dd>2022.09 – 2022.10</dd>
+  </div>
+  <div>
+    <dt>인원</dt>
+    <dd>2명</dd>
+  </div>
+  <div>
+    <dt>역할</dt>
+    <dd>파서 · 실행기 구현</dd>
+  </div>
+  <div>
+    <dt>기술</dt>
+    <dd>C · POSIX</dd>
+  </div>
+</dl>
+<section class="case-section">
+  <div class="story-label">프로젝트 소개</div>
+  <div>
+    <h2>입력 문자열부터 프로세스 실행까지</h2>
+    <ul>
+      <li>Bash의 핵심 동작을 재현하는 2인 팀 프로젝트</li>
+      <li>명령어 파싱과 실행기 구현 담당</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">문제 상황</div>
+  <div>
+    <h2>파이프와 리다이렉션의 입출력 연결</h2>
+    <ul>
+      <li><code>ls | grep foo &gt; result.txt</code>처럼 파이프와 리다이렉션을 함께 사용하는 명령 처리</li>
+      <li>명령별 표준 입출력 연결과 불필요한 파일 디스크립터의 종료 시점 관리 필요</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">해결 과정</div>
+  <div>
+    <h2>해석·연결·실행 단계를 분리</h2>
+    <ul>
+      <li>토큰·따옴표·파이프라인 구조를 해석하는 scanner·parser 구현</li>
+      <li>환경 변수·경로 확장과 builtin 명령 처리 분리</li>
+      <li>파이프 생성 → <code>dup2()</code> 연결 → 불필요한 fd 닫기 → 자식 프로세스 실행 순으로 처리</li>
+      <li><code>fork()</code>·<code>execve()</code>·<code>waitpid()</code> 기반 프로세스 생성·실행·회수 구현</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">구현 범위</div>
+  <div>
+    <h2>대화형 셸의 기본 기능</h2>
+    <ul>
+      <li>builtin·환경 변수 확장·파이프·리다이렉션·시그널 처리 구현</li>
+      <li>실행 경로별 fd 연결·정리와 프로세스 생명주기 관리</li>
+    </ul>
+  </div>
+</section>
+
+<section class="diagram-section">
+  <div class="story-label">명령 처리 구조</div>
+  <div>
+    <h2>파싱과 실행의 경계</h2>
+    <ul>
+      <li>입력 → 토큰화·파싱 → 실행 계획 → builtin 또는 Unix 프로세스 API</li>
+    </ul>
+  </div>
+  <figure class="diagram-card">
+    <img src="/assets/images/diagrams/minishell-uml-component.svg" alt="minishell UML component diagram">
+    <figcaption>파싱 단계와 프로세스 실행의 경계</figcaption>
+  </figure>
+</section>

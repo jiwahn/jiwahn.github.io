@@ -1,0 +1,285 @@
+:root {
+  --ink: #202124;
+  --text: #5f6368;
+  --muted: #6f7479;
+  --accent: #1558d6;
+  --border: #dfe1e5;
+  --soft-border: #e8eaed;
+  --surface: #fafbfc;
+  --tag: #f1f3f4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  background: #fff;
+  color: var(--ink);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.65;
+  margin: 0;
+}
+
+main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 40px 20px 64px;
+}
+
+a {
+  color: var(--accent);
+}
+
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+  border-radius: 3px;
+}
+
+#main-content:focus {
+  outline: none;
+}
+
+.skip-link {
+  position: fixed;
+  top: -80px;
+  left: 20px;
+  z-index: 10;
+  padding: 10px 16px;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 6px;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+h1, h2 {
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: 2rem;
+  margin: 0 0 16px;
+}
+
+h2 {
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+  padding-top: 28px;
+}
+
+[id] {
+  scroll-margin-top: 24px;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  max-width: 860px;
+  min-height: 72px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.site-brand {
+  color: var(--ink);
+  font-size: .95rem;
+  font-weight: 650;
+  letter-spacing: -.02em;
+  text-decoration: none;
+}
+
+.site-nav {
+  display: flex;
+  gap: 18px;
+  margin-left: auto;
+}
+
+.site-nav a {
+  color: var(--text);
+  font-size: .86rem;
+  text-decoration: none;
+}
+
+.site-nav a:hover, .profile-links a:hover {
+  color: var(--accent);
+}
+
+.section-label, .card-kicker, .story-label {
+  color: var(--muted);
+  font-size: .72rem;
+  font-weight: 650;
+  letter-spacing: .08em;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+}
+
+.section-note {
+  color: var(--muted);
+  font-size: .82rem;
+  margin: 0;
+}
+
+.project-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.button {
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: #3c4043;
+  font-size: .88rem;
+  padding: 9px 13px;
+  text-decoration: none;
+}
+
+.button:hover {
+  border-color: #b9cdf7;
+  color: var(--accent);
+}
+
+.button--primary {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.button--primary:hover {
+  background: #3c4043;
+  color: #fff;
+}
+
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 20px;
+}
+
+.post-tags a {
+  background: var(--tag);
+  border-radius: 999px;
+  color: #3c4043;
+  font-size: .85rem;
+  line-height: 1.2;
+  padding: 6px 10px;
+  text-decoration: none;
+}
+
+.post-tags a:hover {
+  background: #e8f0fe;
+  color: var(--accent);
+}
+
+.skill-tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0;
+  margin: 16px 0 0;
+}
+
+.skill-tags li {
+  background: var(--tag);
+  color: #3c4043;
+  border-radius: 4px;
+  font-size: .73rem;
+  padding: 4px 8px;
+  line-height: 1.5;
+}
+
+.analytics-settings {
+  margin-top: 32px;
+  max-width: 650px;
+}
+
+.analytics-settings p, .analytics-settings li {
+  color: var(--text);
+}
+
+.analytics-settings [data-analytics-status] {
+  color: var(--ink);
+  margin-top: 28px;
+}
+
+.analytics-settings button {
+  background: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.analytics-settings button:disabled {
+  cursor: default;
+  opacity: .6;
+}
+
+.analytics-settings ul {
+  margin-top: 28px;
+  padding-left: 20px;
+  font-size: .85rem;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", monospace;
+}
+
+code {
+  background: var(--tag);
+  border-radius: 4px;
+  padding: .1em .25em;
+}
+
+@media (max-width: 680px) {
+  .site-header {
+    min-height: 60px;
+    gap: 12px;
+  }
+
+  .site-nav {
+    gap: 12px;
+  }
+
+  .site-nav a {
+    font-size: .78rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .site-header {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .site-nav {
+    gap: 10px;
+  }
+
+  .site-brand {
+    font-size: .85rem;
+  }
+
+  .site-nav a {
+    font-size: .72rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

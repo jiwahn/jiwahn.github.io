@@ -1,0 +1,20 @@
+---
+layout: default
+---
+<article class="project-page">
+  <a class="breadcrumb" href="{{ '/' | relative_url }}#projects">← Projects</a>
+  <header class="project-hero">
+    <p class="section-label">{{ page.eyebrow | escape }}</p>
+    <h1>{{ page.hero_title | default: page.title }}</h1>
+    <p class="project-lead">{{ page.lead }}</p>
+    {% if page.links %}
+    <div class="project-actions">
+      {% for link in page.links %}
+      <a class="button{% if forloop.first %} button--primary{% endif %}" href="{{ link.url | escape }}">{{ link.label | escape }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% include project-tags.html %}
+  </header>
+  {{ content }}
+</article>

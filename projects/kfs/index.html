@@ -1,0 +1,91 @@
+---
+title: KFS
+lang: ko
+tags: [42 Seoul, C programming, operating-systems]
+eyebrow: "Operating systems · 42 Seoul"
+lead: "Multiboot2 부팅·higher-half 페이징·키보드 입력·VGA 출력을 연결한 x86 커널"
+links:
+  - url: "https://github.com/4kfs2/kfs"
+    label: "View source ↗"
+---
+
+<dl class="case-meta">
+  <div>
+    <dt>기간</dt>
+    <dd>2022.07 – 2023.12</dd>
+  </div>
+  <div>
+    <dt>인원</dt>
+    <dd>2명</dd>
+  </div>
+  <div>
+    <dt>역할</dt>
+    <dd>커널 부팅 · 메모리 · 터미널 구현</dd>
+  </div>
+  <div>
+    <dt>기술</dt>
+    <dd>C · Assembly · GNU linker</dd>
+  </div>
+</dl>
+<section class="case-section">
+  <div class="story-label">프로젝트 소개</div>
+  <div>
+    <h2>부팅부터 명령 입력까지 이어지는 커널</h2>
+    <ul>
+      <li>운영체제가 제공하는 실행 환경을 직접 구성하는 2인 팀 프로젝트</li>
+      <li>어셈블리 진입점에서 C 커널 초기화·메모리 매핑·하드웨어 입출력까지 구현</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">문제 상황</div>
+  <div>
+    <h2>페이징 전환과 하드웨어 접근</h2>
+    <ul>
+      <li>커널의 물리 적재 주소와 가상 실행 주소가 달라 페이징 전환 전후의 명령어·스택·화면 메모리 매핑 필요</li>
+      <li>표준 입출력을 제공하는 운영체제 없이 키보드와 화면 장치에 직접 접근할 경로 필요</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">해결 과정</div>
+  <div>
+    <h2 id="higher-half-paging">주소 매핑과 장치 입출력 구현</h2>
+    <ul>
+      <li>Multiboot2 헤더·어셈블리 진입점·초기 스택을 구성하고 <code>kernel_main()</code>으로 제어 전달</li>
+      <li><code>linker.ld</code>에서 가상 주소와 적재 주소를 분리하고 <code>0x80000000</code> 오프셋의 higher-half 배치 적용</li>
+      <li>동일 페이지 테이블을 낮은 영역과 높은 영역에 연결해 전환 구간의 메모리 접근 유지</li>
+      <li>CR3에 페이지 디렉터리의 물리 주소 등록 → CR0 paging bit 활성화 → 높은 주소로 분기</li>
+      <li>키보드 상태 포트를 polling하고 <code>inb()</code>로 읽은 scancode를 문자로 변환</li>
+      <li>VGA 물리 메모리 <code>0xB8000</code>을 매핑해 문자·색상 기록, 줄바꿈·스크롤과 <code>outb()</code> 기반 커서 갱신 구현</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="story-label">구현 범위</div>
+  <div>
+    <h2>기본 커널 터미널과 부트 정보 처리</h2>
+    <ul>
+      <li>VGA 출력·키보드 입력·<code>reboot</code>를 연결한 <code>kfs$</code> 명령 루프 구현</li>
+      <li>Multiboot 메모리 맵·ELF 심볼 파싱 및 GDT descriptor 구성 코드 작성</li>
+      <li>GDT 초기화와 부트 정보 파싱 호출은 현재 <code>kernel_main()</code>에서 주석 처리된 상태로, 기본 실행 경로와 구분</li>
+    </ul>
+  </div>
+</section>
+
+<section class="diagram-section">
+  <div class="story-label">실행 구조</div>
+  <div>
+    <h2>부팅에서 터미널까지의 실행 경로</h2>
+    <ul>
+      <li>GRUB → 어셈블리 부트 코드·페이징·스택 설정 → <code>kernel_main()</code> → 키보드 입력·VGA 출력·명령 처리</li>
+    </ul>
+  </div>
+  <figure class="diagram-card">
+    <img src="{{ '/assets/images/diagrams/kfs-architecture.svg' | relative_url }}" alt="GRUB에서 boot.s와 kernel_main을 거쳐 명령 루프로 이어지는 KFS 구조. 명령 루프는 키보드 입력, VGA 출력, reboot 기능을 호출합니다.">
+    <figcaption>boot.s·linker.ld의 주소 배치와 커널 실행·호출 경로</figcaption>
+  </figure>
+</section>

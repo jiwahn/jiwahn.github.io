@@ -1,0 +1,35 @@
+title: Jiwoo Ahn — Portfolio
+description: 시스템 소프트웨어와 클라우드 네이티브, 오픈소스 기여를 다루는 Jiwoo Ahn의 포트폴리오.
+url: "https://jiwahn.github.io"
+markdown: kramdown
+lang: ko
+# GA4 measurement ID (G-...). Leave blank to disable analytics.
+google_analytics: "G-0PVHVX774N"
+exclude:
+  - tmp
+  - output
+  - Gemfile
+  - Gemfile.lock
+  - scripts
+  - README.md
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+  - scope:
+      path: "projects"
+    values:
+      project: true
+      layout: project
+  - scope:
+      path: "lfx-mentorship"
+    values:
+      project: true
+      layout: project
+  - scope:
+      path: "cloud-infrastructure"
+    values:
+      project: true
+      layout: project

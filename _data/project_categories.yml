@@ -1,0 +1,15 @@
+- id: all
+  label: 전체
+  tags: []
+- id: systems
+  label: 시스템
+  tags: [system-programming, operating-systems, c-programming, c, networking]
+- id: cloud
+  label: 클라우드·컨테이너
+  tags: [cloud-native, containers]
+- id: frontend
+  label: 프론트엔드
+  tags: [frontend]
+- id: opensource
+  label: 오픈소스
+  tags: [opensource-contribution]

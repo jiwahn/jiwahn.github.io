@@ -1,0 +1,7 @@
+{% if include.items and include.items.size > 0 %}
+<ul class="skill-tags" aria-label="사용 기술">
+  {% for item in include.items %}
+  <li>{{ item | escape }}</li>
+  {% endfor %}
+</ul>
+{% endif %}

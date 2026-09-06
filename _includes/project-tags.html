@@ -1,0 +1,7 @@
+{% if page.tags and page.tags.size > 0 %}
+<nav class="post-tags" aria-label="프로젝트 태그">
+  {% for tag in page.tags %}
+  <a href="{{ '/' | relative_url }}#tag={{ tag | slugify }}">#{{ tag | escape }}</a>
+  {% endfor %}
+</nav>
+{% endif %}

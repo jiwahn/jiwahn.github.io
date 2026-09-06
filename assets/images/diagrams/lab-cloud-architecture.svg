@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" role="img" aria-labelledby="title desc">
+  <title id="title">CLODIS Cloud - three-node RKE2 configuration</title>
+  <desc id="desc">CP is the control plane, etcd member, and workload node. Worker 1 and Worker 2 are workers. All three nodes are Ready. Kubernetes reports 132 logical CPUs, about 1316.7 GiB memory, and two GPU resources on CP and Worker 1. Worker 2 GPU driver validation is pending and no GPU resource is registered on Worker 2.</desc>
+  <rect width="960" height="560" rx="12" fill="#fafbfc"/>
+  <g font-family="system-ui, sans-serif" text-anchor="middle">
+    <rect x="220" y="24" width="520" height="52" rx="8" fill="#fff" stroke="#dfe1e5"/>
+    <text x="480" y="46" font-size="16" fill="#202124">Rancher authentication / API / CLI</text>
+    <text x="480" y="65" font-size="12" fill="#5f6368">VM lifecycle / disk management / SSH port-forward</text>
+    <path d="M480 76V100" stroke="#9aa0a6" stroke-width="1.5"/>
+    <rect x="24" y="100" width="912" height="388" rx="10" fill="#fff" stroke="#dfe1e5"/>
+    <text x="480" y="130" font-size="18" fill="#202124">RKE2 cluster / 3 nodes Ready</text>
+    <rect x="48" y="148" width="864" height="60" rx="6" fill="#edf3ff"/>
+    <text x="480" y="173" font-size="15" fill="#1558d6">Personal namespaces / RBAC / quota / admission policies</text>
+    <text x="480" y="195" font-size="12" fill="#5f6368">KubeVirt + CDI / GPU Jobs / vLLM workloads</text>
+    <path d="M188 208V232M480 208V232M772 208V232" stroke="#9aa0a6" stroke-width="1.5"/>
+    <g fill="#fafbfc" stroke="#dfe1e5">
+      <rect x="48" y="232" width="280" height="196" rx="8"/>
+      <rect x="340" y="232" width="280" height="196" rx="8"/>
+      <rect x="632" y="232" width="280" height="196" rx="8"/>
+    </g>
+    <g fill="#202124">
+      <text x="188" y="260" font-size="17">CP</text>
+      <text x="480" y="260" font-size="17">Worker 1</text>
+      <text x="772" y="260" font-size="17">Worker 2</text>
+    </g>
+    <g fill="#5f6368" font-size="12">
+      <text x="188" y="282">Control plane + etcd + workloads</text>
+      <text x="480" y="282">Worker</text>
+      <text x="772" y="282">Worker / added 2026-10-22</text>
+      <text x="188" y="312">64 logical CPUs / 251.5 GiB RAM</text>
+      <text x="480" y="312">12 logical CPUs / 62.4 GiB RAM</text>
+      <text x="772" y="312">56 logical CPUs / 1002.7 GiB RAM</text>
+      <text x="188" y="342">Quadro RTX 6000 / 1 GPU resource</text>
+      <text x="480" y="342">RTX 5090 / 1 GPU resource</text>
+      <text x="772" y="342">GPU resource not registered</text>
+      <text x="772" y="363">GPU driver validation pending</text>
+      <text x="188" y="402">local-path PV/PVC</text>
+      <text x="480" y="402">local-path PV/PVC</text>
+      <text x="772" y="402">Canal / virt-handler Ready</text>
+    </g>
+    <text x="480" y="464" font-size="13" fill="#1558d6">Pod overlay: Canal / Flannel VXLAN over Tailscale</text>
+    <text x="480" y="520" font-size="12" fill="#5f6368">Kubernetes capacity: 132 logical CPUs / ~1316.7 GiB RAM / 2 GPU resources</text>
+    <text x="480" y="543" font-size="11" fill="#6f7479">Observed 2026-10-22 / VM and connectivity verification records: 2026-10-15–16</text>
+  </g>
+</svg>

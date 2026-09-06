@@ -1,0 +1,124 @@
+---
+title: CLODIS Cloud
+lang: ko
+description: RKE2 기반 3노드 연구실 클러스터. KubeVirt VM 셀프서비스, 사용자별 권한·자원 정책 검증과 VPN 접속 장애 해결.
+tags: [Kubernetes, KubeVirt, cloud-native, infrastructure, virtualization, GPU, storage]
+eyebrow: "Research infrastructure · Private cloud"
+lead: "연구실 서버 3대에 구축한 RKE2 기반 VM·컨테이너·GPU 작업 환경"
+---
+
+<dl class="case-meta">
+  <div>
+    <dt>역할</dt>
+    <dd>인프라 설계 · 구축 · 검증</dd>
+  </div>
+  <div>
+    <dt>구성</dt>
+    <dd>3노드 · Kubernetes 등록 GPU 2장</dd>
+  </div>
+  <div>
+    <dt>주요 기술</dt>
+    <dd>RKE2 · Rancher · KubeVirt · CDI</dd>
+  </div>
+  <div>
+    <dt>기록 기준</dt>
+    <dd>구성: 2026.10.22<br>기능 검증: 2026.10.15–16</dd>
+  </div>
+</dl>
+<section class="case-section" aria-labelledby="scope-title">
+  <div class="story-label">프로젝트 소개</div>
+  <div>
+    <h2 id="scope-title">사용자별 VM과 GPU 작업 환경</h2>
+    <ul>
+      <li>연구실의 VM·컨테이너 자원을 Kubernetes에서 관리하는 3노드 클러스터</li>
+      <li>사용자 인증을 거친 API·CLI로 VM과 디스크를 생성·관리하는 셀프서비스 구성</li>
+      <li>Rancher 기반 인증·클러스터 관리, Kubernetes Job·vLLM 기반 GPU 작업 환경 구성</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section" aria-labelledby="architecture-title">
+  <div class="story-label">인프라 구성</div>
+  <div>
+    <h2 id="architecture-title">3노드 클러스터와 노드 로컬 스토리지</h2>
+    <ul>
+      <li>CP: control plane·etcd·워크로드 실행, Worker 1·2: worker 역할</li>
+      <li>KubeVirt·CDI로 VM과 디스크 이미지 관리, local-path 기반 PV/PVC 사용</li>
+    </ul>
+    <dl class="cloud-specs">
+      <div>
+        <dt>CPU</dt>
+        <dd>논리 CPU 132개 — CP 64개 · Worker 1 12개 · Worker 2 56개</dd>
+      </div>
+      <div>
+        <dt>메모리</dt>
+        <dd>Kubernetes 인식 용량 약 1,316.7GiB — CP 251.5GiB · Worker 1 62.4GiB · Worker 2 1,002.7GiB</dd>
+      </div>
+      <div>
+        <dt>GPU</dt>
+        <dd>Kubernetes 등록 기준 Quadro RTX 6000 1장 · GeForce RTX 5090 1장</dd>
+      </div>
+      <div>
+        <dt>사용자 공간</dt>
+        <dd>개인 namespace 10개 · VM·디스크 관리 권한 계정 9개 · 읽기 전용 계정 1개</dd>
+      </div>
+      <div>
+        <dt>네트워크</dt>
+        <dd>RKE2 Canal · Tailscale을 통한 노드 간 Pod 오버레이</dd>
+      </div>
+      <div>
+        <dt>스토리지</dt>
+        <dd>local-path PV/PVC · 노드 로컬 디스크</dd>
+      </div>
+    </dl>
+  </div>
+  <figure class="diagram-card">
+    <img src="{{ '/assets/images/diagrams/lab-cloud-architecture.svg' | relative_url }}" width="960" height="560" alt="CP가 control plane과 etcd를 담당하고 Worker 1·2가 참여하는 3노드 RKE2 구성. 논리 CPU 132개, Kubernetes 인식 메모리 약 1316.7GiB. GPU는 CP와 Worker 1에 각각 1개 등록되어 있으며 Worker 2는 GPU 드라이버 검증 대기 상태.">
+  </figure>
+</section>
+
+<section class="case-section" aria-labelledby="selfservice-title">
+  <div class="story-label">구현 및 검증</div>
+  <div>
+    <h2 id="selfservice-title">사용자 권한으로 VM과 디스크 관리</h2>
+    <ul>
+      <li>KubeVirt·CDI와 사용자별 RBAC를 구성해 승인된 Ubuntu 이미지로 VM 생성 및 데이터 디스크 연결</li>
+      <li>사용자 Rancher 인증을 거친 Kubernetes API port-forward와 게스트 공개키 인증으로 SSH 접속</li>
+      <li>실제 학부연구생 계정으로 로그인한 뒤 사용자 API를 통한 VM·루트 디스크 생성 확인</li>
+      <li>10GiB 데이터 디스크 생성·연결 및 VM 내부 SSH 접속 확인</li>
+      <li>VM 중지·시작 후 루트·데이터 디스크의 파일 유지 확인</li>
+      <li>사용자 API를 통한 VM·Service·디스크 삭제 확인</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section" aria-labelledby="policy-title">
+  <div class="story-label">권한 및 자원 정책</div>
+  <div>
+    <h2 id="policy-title">허용 작업과 차단 요청 검증</h2>
+    <ul>
+      <li>namespace별 RBAC·ResourceQuota·NetworkPolicy·ValidatingAdmissionPolicy 구성</li>
+      <li>다른 사용자 namespace의 VM API 접근 거부 확인</li>
+      <li>PVC 요청량 합계 40GiB 상한에 대해 41GiB 요청 거부 확인</li>
+      <li>서버 dry-run에서 hostDisk 사용과 CPU requests·limits 불일치 요청 거부 확인</li>
+      <li>일반 대학원생 계정 4개로 GPU Job 실행 및 종료 코드 0 확인</li>
+      <li>GPU 2개 요청·특권 Job·타 namespace 요청 거부 및 GPU 1개 쿼터 초과 Job 차단 확인</li>
+    </ul>
+  </div>
+</section>
+
+<section class="case-section" aria-labelledby="network-title">
+  <div class="story-label">장애 분석 및 해결</div>
+  <div>
+    <h2 id="network-title">Rancher VPN 접속 장애 해결</h2>
+    <ul>
+      <li>증상: VPN 주소로 직접 접속하면 시간 초과, SSH 터널을 통한 접속은 정상</li>
+      <li>분석: tcpdump로 인터페이스별 패킷을 비교해 VPN으로 들어온 요청의 응답이 다른 터널로 나가는 현상 확인</li>
+      <li>원인: Calico의 패킷 mark와 Tailscale 정책 라우팅 조건이 겹쳐 잘못된 응답 경로 선택</li>
+      <li>수정: Calico의 mark 비트 영역을 분리하고 RKE2 HelmChartConfig에 저장, Canal Pod 순차 교체</li>
+      <li>검증: CA 인증서 검증을 사용한 VPN 직접 접속에서 HTTP 200 확인</li>
+      <li>회귀 검사: 노드 간 Pod 통신·256KiB 전송·DNS·Service 접근·namespace 격리 등 연결성 검사 11개가 변경 전후 모두 통과</li>
+      <li>기존 실행 워크로드의 상태와 재시작 횟수 유지 확인</li>
+    </ul>
+  </div>
+</section>

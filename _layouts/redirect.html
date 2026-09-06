@@ -1,0 +1,22 @@
+---
+layout: null
+---
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <link rel="canonical" href="{{ page.redirect_to | absolute_url }}">
+    <title>페이지 이동 | {{ site.title | escape }}</title>
+    {% if page.preserve_filter %}
+    <script defer src="{{ '/assets/js/redirect.js' | relative_url }}" data-target="{{ page.redirect_to | relative_url }}"></script>
+    <noscript><meta http-equiv="refresh" content="0; url={{ page.redirect_to | relative_url }}"></noscript>
+    {% else %}
+    <meta http-equiv="refresh" content="0; url={{ page.redirect_to | relative_url }}">
+    {% endif %}
+  </head>
+  <body>
+    <p><a href="{{ page.redirect_to | relative_url }}">페이지로 이동</a></p>
+  </body>
+</html>

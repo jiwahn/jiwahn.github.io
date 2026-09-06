@@ -1,0 +1,22 @@
+<section class="home-section" id="projects" aria-labelledby="projects-heading" data-project-list>
+  <div class="home-section-heading">
+    <p class="section-label">02 / Projects</p>
+    <h2 id="projects-heading">프로젝트</h2>
+    <p class="section-note">오픈소스 기여 · 인프라 구축 · 시스템·제품 개발</p>
+  </div>
+  <nav class="category-filters" aria-label="분야별 프로젝트 필터" hidden>
+    {% for category in site.data.project_categories %}
+    <button type="button" class="category-filter" data-category="{{ category.id }}" data-match="{{ category.tags | join: ' ' }}" aria-pressed="{% if category.id == 'all' %}true{% else %}false{% endif %}">
+      <span data-label>{{ category.label }}</span><span data-count></span>
+    </button>
+    {% endfor %}
+  </nav>
+  {% assign home_projects = site.data.projects | where_exp: 'project', 'project.group == nil' %}
+  <p class="filter-status" data-filter-status role="status" aria-live="polite">{{ home_projects.size }}개 프로젝트</p>
+  <p class="section-note" data-project-empty hidden>해당하는 프로젝트가 없습니다. 전체 필터를 선택해 보세요.</p>
+  <div class="project-list">
+    {% for project in home_projects %}
+    {% include project-card.html project=project number=forloop.index %}
+    {% endfor %}
+  </div>
+</section>

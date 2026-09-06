@@ -1,0 +1,27 @@
+- title: LFX Mentee · urunc
+  organization: CNCF
+  kind: LFX Mentorship
+  period: 2026.03 - 2026.05
+  url: /lfx-mentorship/
+  summary: OCI 이미지 annotation 전달 경로 분석·containerd 조회 PoC 구현, 메인테이너와 주간 sync 9회
+  tech: [Go, containerd, OCI]
+
+- title: Master's degree, Computer Science and Engineering
+  organization: Kyungpook National University · CLODIS LAB
+  period: 2025 - 2027
+
+- title: Software Developer
+  organization: Hiperwall, Inc.
+  kind: Internship
+  period: 2024.06 - 2024.08
+
+- title: Cadet
+  organization: 42 Seoul
+  kind: Apprenticeship
+  period: 2022.07 - 2024.02
+  summary: C/C++ 기반 메모리·프로세스·소켓·동시성 학습, 셸·IRC 서버 팀 프로젝트 구현
+  tech: [C, C++, Unix, TCP]
+
+- title: Bachelor's degree, Computer Science and Engineering
+  organization: Kyungpook National University
+  period: 2023 - 2025

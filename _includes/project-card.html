@@ -1,0 +1,14 @@
+{% assign project = include.project %}
+{% assign project_page = site.pages | where: "url", project.url | first %}
+<article class="project-card{% if project.collection %} project-card--collection{% endif %}" data-project-tags="{% for tag in project_page.tags %}{{ tag | slugify }} {% endfor %}">
+  <p class="project-number" aria-hidden="true">{{ include.number | prepend: '0' | slice: -2, 2 }}</p>
+  <div>
+    <p class="card-kicker">{{ project.context | escape }}</p>
+    <h3><a href="{{ project.url | relative_url }}">{{ project.title | escape }} <span aria-hidden="true">↗</span></a></h3>
+    <p class="project-description">{{ project.summary | escape }}</p>
+    {% if project.evidence %}
+    <p class="project-evidence">{{ project.evidence | escape }}</p>
+    {% endif %}
+    {% include skill-tags.html items=project.tech %}
+  </div>
+</article>

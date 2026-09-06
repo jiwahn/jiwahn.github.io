@@ -1,0 +1,71 @@
+verified_on: "2026-10-18"
+groups:
+  - id: rustpython
+    repo: RustPython/RustPython
+    prs:
+      - number: 9083
+        title: "ci: run all passing extra_tests snippets on wasm-wasi via exclude list"
+        merged_at: "2026-10-13T11:47:54Z"
+      - number: 8986
+        title: "fix: signal.SIGINT and signal() raise NotImplementedError on wasi"
+        merged_at: "2026-10-07T04:57:13Z"
+      - number: 8899
+        title: "fix: cross-interp buffer sharing drops shape without threading"
+        merged_at: "2026-09-29T11:57:02Z"
+      - number: 8832
+        title: "ci: run test_fstring on wasm-wasi"
+        merged_at: "2026-09-26T12:44:06Z"
+      - number: 8747
+        title: "ci: run wasm-wasi snippets and tests from declared lists"
+        merged_at: "2026-09-20T05:23:44Z"
+      - number: 8476
+        title: "wasi: fix os.environb byte handling"
+        merged_at: "2026-08-09T06:09:19Z"
+      - number: 8385
+        title: "wasi: support monotonic / perf time"
+        merged_at: "2026-07-29T11:33:33Z"
+      - number: 8318
+        title: "wasm: add stderr support"
+        merged_at: "2026-07-19T05:13:47Z"
+
+  - id: podman
+    repo: podman-container-tools/podman
+    prs:
+      - number: 29649
+        title: "libpod(refactor): optimize directory empty check"
+        merged_at: "2026-08-27T10:26:04Z"
+      - number: 29614
+        title: "libpod: adjust permissions for imported volumes"
+        merged_at: "2026-08-24T18:36:14Z"
+      - number: 29159
+        title: "kube: use native seccompProfile fields"
+        merged_at: "2026-08-14T01:55:50Z"
+      - number: 29260
+        title: "libpod: cleanup after failed container init"
+        merged_at: "2026-07-23T15:31:09Z"
+      - number: 29129
+        title: "docs: clarify idmap mount option syntax"
+        merged_at: "2026-07-07T10:32:46Z"
+      - number: 28977
+        title: "kube: alias OCI runtime annotations without underscores"
+        merged_at: "2026-06-24T14:59:15Z"
+      - number: 28879
+        title: "events: include labels in pod and volume attributes Fixes: #26480"
+        merged_at: "2026-06-11T08:27:38Z"
+      - number: 28641
+        title: "Feat/container annotation filter"
+        merged_at: "2026-05-26T10:00:41Z"
+
+  - id: nerdctl
+    repo: containerd/nerdctl
+    prs:
+      - number: 5129
+        title: "feat: add volume-nocopy"
+        merged_at: "2026-08-25T01:50:50Z"
+
+  - id: buildah
+    repo: podman-container-tools/buildah
+    prs:
+      - number: 6908
+        title: "parse: honor containers.conf seccomp_profile"
+        merged_at: "2026-06-23T13:21:47Z"
